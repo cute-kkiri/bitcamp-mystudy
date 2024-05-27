@@ -1,4 +1,3 @@
 # bitcamp-mystudy
 
 okok
-testest
