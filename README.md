@@ -98,3 +98,4 @@
       - build 생성부터 자동으로 실행 - $gradle run
       - build 폴더 생성 - $gradle (-i, -d) build
       - build/main 파일 실행 - $gradle (-q) run
+      - 처음에 만들어진 example이 아닌 내가 생성하고자 하는 java 컴파일 $gradle compileJava
