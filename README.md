@@ -101,7 +101,7 @@
       - build/main 파일 실행 - $gradle (-q) run
       - 처음에 만들어진 example이 아닌 내가 생성하고자 하는 java 컴파일 $gradle compileJava
 
-## 4일차(2024-05-30, 목)
+## 5일차(2024-05-30, 목)
 
 - 직접 Bytecode로 프로그래밍 하기
 (코드실행방법 블로그 - https://medium.com/@davethomas_9528/writing-hello-world-in-java-byte-code-34f75428e0ad)
