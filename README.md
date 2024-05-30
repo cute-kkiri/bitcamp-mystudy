@@ -75,6 +75,7 @@
     - D2Coding 폰트
   - VSCode 설정
   (구글 포맷 설정 블로그 - https://medium.com/echo-devblog/vscode-java-formatting-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0-56d89ce1ec4d)
+  (구글 포맷 xml - https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml)
     - Font Family: D2Coding
     - Java Formatting: GoogleStyle
     - Format On Save: 활성화
@@ -99,3 +100,14 @@
       - build 폴더 생성 - $gradle (-i, -d) build
       - build/main 파일 실행 - $gradle (-q) run
       - 처음에 만들어진 example이 아닌 내가 생성하고자 하는 java 컴파일 $gradle compileJava
+
+## 4일차(2024-05-30, 목)
+
+- 직접 Bytecode로 프로그래밍 하기
+(코드실행방법 블로그 - https://medium.com/@davethomas_9528/writing-hello-world-in-java-byte-code-34f75428e0ad)
+  - HelloWorld.class 파일 제작 및 실행
+- 자바 기초 프로그래밍
+  - 소스 파일(.java)과 클래스 블록, 클래스 파일(.class)
+  - public 클래스와 소스 파일명
+  - 애플리케이션 entry point: main() 메서드
+  - 애플리케이션 아규먼트 다루는 방법: main(String[] args) 그리고 반드시 String으로 받는다.
