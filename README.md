@@ -81,7 +81,7 @@
     - Format On Save: 활성화
     - Code Lens: 비활성화
     - Inlay Hints: 비활성화
-- Java 컴파이리과 실행
+- Java 컴파일과 실행
   - 컴파일 옵션 사용법
   - javac 컴파일 옵션(https://internet-craft.tistory.com/24)
   - JVM 옵션 사용법
