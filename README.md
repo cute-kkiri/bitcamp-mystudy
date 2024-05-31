@@ -105,9 +105,19 @@
 
 - 직접 Bytecode로 프로그래밍 하기
 (코드실행방법 블로그 - https://medium.com/@davethomas_9528/writing-hello-world-in-java-byte-code-34f75428e0ad)
+(java specification - https://docs.oracle.com/javase/specs/)
   - HelloWorld.class 파일 제작 및 실행
 - 자바 기초 프로그래밍
   - 소스 파일(.java)과 클래스 블록, 클래스 파일(.class)
   - public 클래스와 소스 파일명
   - 애플리케이션 entry point: main() 메서드
   - 애플리케이션 아규먼트 다루는 방법: main(String[] args) 그리고 반드시 String으로 받는다.
+
+## 6일차(2024-05-31, 금)
+- atmega128 instruction 검색해봄.(기계어 설명 명세서)
+- JVM Bytecode Viewer VSCode 확장프로그램 설치
+- 자바 기초 프로그래밍
+  - 패키지
+  - 데이터 타입과 리터럴
+  - 변수와 메모리
+  - polyglot - 한프로젝트에 여러 언어로 코드를 작성.
