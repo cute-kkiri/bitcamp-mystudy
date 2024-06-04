@@ -125,3 +125,15 @@
   ## 7일차(2024-06-03, 월)
   - 자바 기초 프로그래밍
     - 문자와 문자집합(계속)
+      - ASCII, ISO-8859, MS949, Unicode, UTF-8, UTF-16
+    - 숫자를 메모리에 저장
+      - 정수
+        - Sign-Magnitude, 1의 보수, 2의 보수(java에서 정수를 저장하는 방식)
+      - 부동소수점
+        - Execess-K
+
+## 8일차(2024-06-04, 화)
+- Eclipse IDE(https://www.eclipse.org/)
+  - Eclipse 설치를 도와주는 설치 도구가 설치됨.
+  - 설정하기.(eoms-docs/devtooluserguide/jdk-eclipse-sttings.md)
+- 변수(variables)
