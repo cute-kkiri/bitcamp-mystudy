@@ -32,7 +32,6 @@ java {
     }
 }
 
-// $ gradle run을 실행하면 다음 설정에 지정된 클래스가 실행된다.
 application {
     // Define the main class for the application.
     mainClass = 'bitcamp.myapp.App'
@@ -41,8 +40,4 @@ application {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
-}
-
-run {
-    standardInput = System.in
 }

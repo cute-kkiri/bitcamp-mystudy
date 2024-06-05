@@ -1,5 +1,4 @@
 # bitcamp-study
-
 네이버클라우드캠프 데브옵스 14기 실습 자료 저장소
 
 - 전임강사
@@ -7,19 +6,16 @@
   jinyoung.eom@gmail.com
 
 ## 웨일온 접속 정보
-
 - 회의실 번호 / 암호: 210 866 3081 / 111222
 - 회의링크: https://whaleon.us/o/CSrtk1/84888a51da9d4f939e63eee37248fb28
 
 ## 강의자료
-
 - 실습(https://github.com/eomjinyoung/bitcamp-study)
 - 강의자료
   - 수업 문서(https://github.com/eomcs/eomcs-docs)
   - 프로그래밍 자료(https://github.com/eomcs/eomcs-java)
 
 ## 1일차(2024-05-24,금)
-
 - 소프트웨어 개요
   - 시스템 소프트웨어와 애플리케이션 소프트웨어
   - Standalone과 Client/Server
@@ -29,7 +25,6 @@
   - 실습 저장소 준비 및 복제
 
 ## 2일차(2024-05-27,월)
-
 - GIT 소개
   - 기본 명령 사용법(clone, add, commit, push, pull)
   - 개인 저장소 준비 및 가져오기
@@ -54,7 +49,6 @@
 - 수업 진행 방식 소개
 
 ## 3일차(2024-05-28,화)
-
 - 컴파일 방식과 인터프리터 방식, 하이브리드 방식
   - Nodejs 설치 및 실행
     - hello.js
@@ -69,7 +63,6 @@
   - Java ME
 
 ## 4일차(2024-05-29,수)
-
 - 개발 도구 설정
   - 폰트 설치
     - D2Coding 폰트
@@ -102,7 +95,6 @@
       - 처음에 만들어진 example이 아닌 내가 생성하고자 하는 java 컴파일 $gradle compileJava
 
 ## 5일차(2024-05-30, 목)
-
 - 직접 Bytecode로 프로그래밍 하기
 (코드실행방법 블로그 - https://medium.com/@davethomas_9528/writing-hello-world-in-java-byte-code-34f75428e0ad)
 (java specification - https://docs.oracle.com/javase/specs/)
@@ -122,18 +114,33 @@
   - 변수와 메모리
   - polyglot - 한프로젝트에 여러 언어로 코드를 작성.
 
-  ## 7일차(2024-06-03, 월)
-  - 자바 기초 프로그래밍
-    - 문자와 문자집합(계속)
-      - ASCII, ISO-8859, MS949, Unicode, UTF-8, UTF-16
-    - 숫자를 메모리에 저장
-      - 정수
-        - Sign-Magnitude, 1의 보수, 2의 보수(java에서 정수를 저장하는 방식)
-      - 부동소수점
-        - Execess-K
+## 7일차(2024-06-03, 월)
+- 자바 기초 프로그래밍
+  - 문자와 문자집합(계속)
+    - ASCII, ISO-8859, MS949, Unicode, UTF-8, UTF-16
+  - 숫자를 메모리에 저장
+    - 정수
+      - Sign-Magnitude, 1의 보수, 2의 보수(java에서 정수를 저장하는 방식)
+    - 부동소수점
+      - Execess-K
 
 ## 8일차(2024-06-04, 화)
-- Eclipse IDE(https://www.eclipse.org/)
+- 자바 기초 프로그래밍
+  - 변수 선언 의미와 방법
+  - 데이터 타입에 따라서 변수에 저장할 수 있는 값의 유효범위
+- 개발 도구
+  - Eclipse IDE 설치 및 설정(https://www.eclipse.org/)
+  - Gradle 빌드 도구로 만든 프로젝트를 Eclipse IDE로 임포트 하는 방법
   - Eclipse 설치를 도와주는 설치 도구가 설치됨.
   - 설정하기.(eoms-docs/devtooluserguide/jdk-eclipse-sttings.md)
 - 변수(variables)
+
+## 9일차(2024-06-05, 수)
+- 실습 프로젝트 준비
+  - myapp 프로젝트 생성 및 빌드, 실행(gradle)
+- 개발 도구
+  - IntelliJ IDE 설치 및 설정(https://www.jetbrains.com/ko-kr/idea/download/download-thanks.html?platform=windows&code=IIC)
+  - cummunity 무료평가판 설치
+  - 해시코드 확인방법 링크(https://www.reddit.com/r/Windows10HowTo/comments/107cior/how_to_check_md5_or_sha256_checksum_in_windows_11/?rdt=44064)
+    - 해시코드 확인 명령어 ($ certutil -hashfile ideaIC-2024.1.2.exe SHA256) 해당 폴더 경로에서
+- md(markdown이라는 문법)
