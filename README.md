@@ -144,3 +144,8 @@
   - 해시코드 확인방법 링크(https://www.reddit.com/r/Windows10HowTo/comments/107cior/how_to_check_md5_or_sha256_checksum_in_windows_11/?rdt=44064)
     - 해시코드 확인 명령어 ($ certutil -hashfile ideaIC-2024.1.2.exe SHA256) 해당 폴더 경로에서
 - md(markdown이라는 문법)
+
+## 10일차(2024-06-07, 금)
+- 자바 기초 프로그래밍
+  - 연산자
+- 실습 프로젝트
