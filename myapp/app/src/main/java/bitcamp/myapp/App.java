@@ -8,55 +8,60 @@ public class App {
         java.io.InputStream keyboard = System.in;
         java.util.Scanner keyboardScanner = new java.util.Scanner(keyboard);
 
+        String boldAnsi = "\033[1m";
+        String redAnsi = "\033[31m";
+        String resetAnsi = "\033[0m";
         String appTitle = "[팀 프로젝트 관리 시스템]";
         String line = "----------------------------------------";
-        String menu1 = "1. 회원";
-        String menu2 = "2. 팀";
-        String menu3 = "3. 프로젝트";
-        String menu4 = "4. 게시판";
-        String menu5 = "5. 도움말";
-        String menu6 = "6. 종료";
 
-        System.out.println(line);
-        System.out.println(appTitle);
-        System.out.println(menu1);
-        System.out.println(menu2);
-        System.out.println(menu3);
-        System.out.println(menu4);
-        System.out.println(menu5);
-        System.out.println(menu6);
-        System.out.println(line);
+        // 배열 저장
+        String[] menus = new String[] {
+                "회원",
+                "팀",
+                "프로젝트",
+                "게시판",
+                "도움말",
+                "종료"
+        };
+
+        System.out.println(boldAnsi + line + resetAnsi);
+        System.out.println(boldAnsi + appTitle + resetAnsi);
+
+        // 반복문과 조건문을 결합하여 실행.
+        // for 문
+        for (int i = 0; i < menus.length; i++) {
+//            if (i == 5) {
+            if (menus[i] == "종료") { // 주소를 비교하는 것이기 때문에 equals를 쓰는 것이 바람직하다.
+                System.out.printf("%s%d. %s%s\n", (boldAnsi + redAnsi), (i + 1), menus[i], resetAnsi);
+            } else {
+                System.out.printf("%d. %s\n", (i + 1), menus[i]);
+            }
+        }
+
+        System.out.println(boldAnsi + appTitle + resetAnsi);
 
         int menuNo;
 
-        do {
+        // do-while에서 while 문으로 변경.
+        while(true) {
             System.out.print("> ");
             menuNo = keyboardScanner.nextInt();
 
-            switch(menuNo) {
-                case 1:
-                    System.out.println("회원");
+            // switch 문 대신 if 문으로 작성하기.
+            // 더 간단하게 작성해보기.
+            if (menuNo >= 1 && menuNo <= menus.length) {
+                if (menus[menuNo - 1] == "종료"){
+                    // 종료 메뉴일 때 반복문을 나간다.
                     break;
-                case 2:
-                    System.out.println("팀");
-                    break;
-                case 3:
-                    System.out.println("프로젝트");
-                    break;
-                case 4:
-                    System.out.println("게시판");
-                    break;
-                case 5:
-                    System.out.println("도움말");
-                    break;
-                case 6:
-                    System.out.println("종료합니다.");
-                    break;
-                default:
-                    System.out.println("메뉴 번호가 옳지 않습니다.");
-                    break;
+                }
+                System.out.println(menus[menuNo - 1]);
+            } else {
+                System.out.println("메뉴 번호가 옳지 않습니다.");
             }
-        } while (menuNo != 6);
+        }
+
+        // 종료하면 어차피 반복문을 나오니까.
+        System.out.println("종료합니다.");
 
         // 사용을 완료한 자원은 반환해야 다른 프로세스(프로그램)이 사용할 수 있다.
         // 단, JVM을 종료하면 JVM이 사용한 모든 자원은 강제 회수된다.
