@@ -3,152 +3,95 @@
  */
 package bitcamp.myapp;
 
-// 04. 키보드 입력 다루기
+// 08. 기능 단위로 명령문 묶기 : 메서드 사용법
 
+import java.util.Scanner;
 import java.util.InputMismatchException;
 
 public class App {
-    public static void main(String[] args) {
-        // 키보드 입력 함수 생성하기
-        java.util.Scanner keboardScanner = new java.util.Scanner(System.in);
+    // 키보드 입력 함수 생성하기
+    static Scanner keyboardScanner = new Scanner(System.in);
 
+    static String[] menus = {
+            "회원",
+            "팀",
+            "프로젝트",
+            "게시판",
+            "도움말",
+            "종료"
+    };
+
+    public static void main(String[] args) {
+
+        printMenu();
+
+        String command;
+
+        while (true) {
+            try {
+                command = prompt();
+
+                if (command.equals("menu")) {
+                    printMenu();
+                } else {
+                    int menuNo = Integer.parseInt(command);
+                    String menuTitle = getMenuTitle(menuNo); // 요기 놓침.
+
+                    if (menuTitle == null) {
+                        System.out.println("유효한 메뉴 번호가 아닙니다.");
+                    } else if (menuTitle.equals("종료")) {
+                        break;
+                    } else {
+                        System.out.println(menuTitle);
+                    }
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("숫자로 메뉴 번호를 입력하세요.");
+            }
+
+        }
+
+        System.out.println("종료합니다.");
+        keyboardScanner.close();
+    }
+
+    // menu 출력 메서드
+    static void printMenu() {
         String boldAnsi = "\033[1m";
         String redAnsi = "\033[31m";
         String resetAnsi = "\033[0m";
         String line = "---------------------------------------";
         String title = "[팀 프로젝트 관리 시스템]";
-        String menu1 = "1. 회원";
-        String menu2 = "2. 팀";
-        String menu3 = "3. 프로젝트";
-        String menu4 = "4. 게시판";
-        String menu5 = "5. 도움말";
-        String menu6 = "6. 종료";
-        
+
         System.out.println(boldAnsi + line + resetAnsi);
         System.out.println(boldAnsi + title + resetAnsi);
-        System.out.println(menu1);
-        System.out.println(menu2);
-        System.out.println(menu3);
-        System.out.println(menu4);
-        System.out.println(menu5);
-        System.out.println(boldAnsi + redAnsi + menu6 + resetAnsi);
-        System.out.println(boldAnsi + line + resetAnsi);
 
-        int menuNo;
-
-        /*System.out.print("> ");
-        // scanner 도구를 사용하여 키보드로부터 한 줄의 문자열을 가져올 때 사용하는 명령어
-        menuNo = keboardScanner.nextInt();
-        System.out.println(menuNo);*/
-
-        // do-while문으로 작성해보기.
-        /*do {
-            System.out.print("> ");
-            menuNo = keboardScanner.nextInt();
-
-            switch(menuNo) {
-                case 1:
-                    System.out.println("회원");
-                    break;
-                case 2:
-                    System.out.println("팀");
-                    break;
-                case 3:
-                    System.out.println("프로젝트");
-                    break;
-                case 4:
-                    System.out.println("게시판");
-                    break;
-                case 5:
-                    System.out.println("도움말");
-                    break;
-                case 6:
-                    System.out.println("종료합니다.");
-                    break;
-                default:
-                    System.out.println("메뉴 번호가 옳지 않습니다.");
-                    break;
+        for (int i = 0; i < menus.length; i++) {
+            if (menus[i].equals("종료")) {
+                System.out.printf("%s%d. %s%s\n", (boldAnsi + redAnsi), (i + 1), menus[i], resetAnsi);
+            } else {
+                System.out.printf("%d. %s\n", (i + 1), menus[i]);
             }
+        }
 
-            // System.out.println(menuNo);
-        } while(menuNo != 6);*/
+        System.out.println(boldAnsi + line + resetAnsi);
+    }
 
-        // int값이 아닌 다른 값으로 입력 했을 때
-        /*boolean validInput = false;
-        while(!validInput) {
-            System.out.print("> ");
+    // 입력받는 메서드
+    static String prompt() {
+        System.out.print("> ");
+        return keyboardScanner.nextLine();
+    }
 
-            try {
-                // try문 안에 있어야 한다..
-                menuNo = keboardScanner.nextInt();
+    // 메뉴 번호의 유효성 검증 메서드
+    static boolean isValidateMenu(int menuNo) {
+        return menuNo >= 1 && menuNo <= menus.length;
+    }
 
-                switch(menuNo) {
-                    case 1:
-                        System.out.println("회원");
-                        break;
-                    case 2:
-                        System.out.println("팀");
-                        break;
-                    case 3:
-                        System.out.println("프로젝트");
-                        break;
-                    case 4:
-                        System.out.println("게시판");
-                        break;
-                    case 5:
-                        System.out.println("도움말");
-                        break;
-                    case 6:
-                        System.out.println("종료합니다.");
-                        validInput = true;
-                        break;
-                    default:
-                        System.out.println("메뉴 번호가 옳지 않습니다.");
-                        break;
-                }
-            } catch(InputMismatchException e) {
-                System.out.println("잘못된 입력입니다. 정수를 입력하세요."); // 예외가 발생하면 메시지 출력
-                keboardScanner.next();
-            }*/
-
-            // 다시 do-while로 작성해볼까..?
-            boolean validInput = false;
-            do {
-                try {
-                    System.out.print("> ");
-                    menuNo = keboardScanner.nextInt();
-
-                    switch(menuNo) {
-                        case 1:
-                            System.out.println("회원");
-                            break;
-                        case 2:
-                            System.out.println("팀");
-                            break;
-                        case 3:
-                            System.out.println("프로젝트");
-                            break;
-                        case 4:
-                            System.out.println("게시판");
-                            break;
-                        case 5:
-                            System.out.println("도움말");
-                            break;
-                        case 6:
-                            System.out.println("종료합니다.");
-                            validInput = true;
-                            break;
-                        default:
-                            System.out.println("메뉴 번호가 옳지 않습니다.");
-                            break;
-                    }
-                } catch(InputMismatchException e) {
-                    System.out.println("잘못된 입력입니다. 정수를 입력하세요."); // 예외가 발생하면 메시지 출력
-                    keboardScanner.next();
-                }
-
-            } while (!validInput);
-
-        keboardScanner.close();
+    // 메뉴 타이틀을 알아내는 메서드
+    static String getMenuTitle(int menuNo) {
+        // 삼항연산자로 줄여서 작성.
+        return isValidateMenu(menuNo) ? menus[menuNo - 1] : null;
     }
 }
