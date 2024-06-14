@@ -1,7 +1,13 @@
 package bitcamp.myapp;
 
-public class App {
+import java.util.Scanner;
 
+public class App03 {
+
+    // 상수는 대문자.
+    static final int MAX_SIZE = 100; // 못 바꿈.
+
+    static Scanner keyboardScanner = new Scanner(System.in);
     static String[] mainMenus = new String[]{"회원", "팀", "프로젝트", "게시판", "도움말", "종료"};
     static String[][] subMenus = {
             {"등록", "목록", "조회", "변경", "삭제"},
@@ -9,6 +15,16 @@ public class App {
             {"등록", "목록", "조회", "변경", "삭제"},
             {"등록", "목록", "조회", "변경", "삭제"}
     };
+    // class가 로딩(Class Loading) 될 때 static을 선언할 수 있다.
+    // static 변수로 선언해서 저장해서 조회시 등록한 값을 확인할 수 있음.(Method Area에 저장됨.)
+    // JVM이 종료될 때 내용이 사라짐.
+    // static 변수는 null로 자동 초기화 됨.
+    static String[] name = new String[MAX_SIZE];
+    static String[] email = new String[MAX_SIZE];
+    static String[] password = new String[MAX_SIZE];
+    static String[] tel = new String[MAX_SIZE];
+    // 저장될 때 count
+    static int memberLength = 0;
 
     public static void main(String[] args) {
 
@@ -17,7 +33,7 @@ public class App {
         String command;
         while (true) {
             try {
-                command = Prompt.Input("메인>");
+                command = prompt("메인>");
 
                 if (command.equals("menu")) {
                     printMenu();
@@ -44,7 +60,7 @@ public class App {
 
         System.out.println("종료합니다.");
 
-        Prompt.close();
+        keyboardScanner.close();
     }
 
     static void printMenu() {
@@ -77,6 +93,11 @@ public class App {
         System.out.println("9. 이전");
     }
 
+    static String prompt(String title) {
+        System.out.printf("%s ", title);
+        return keyboardScanner.nextLine();
+    }
+
     static boolean isValidateMenu(int menuNo, String[] menus) {
         return menuNo >= 1 && menuNo <= menus.length;
     }
@@ -89,7 +110,7 @@ public class App {
         printSubMenu(menuTitle, menus);
         while (true) {
             // String.format - String 클래스에 내장된 format: printf처럼 쓸 수 있다.
-            String command = Prompt.Input(String.format("메인/%s>", menuTitle));
+            String command = prompt(String.format("메인/%s>", menuTitle));
             if (command.equals("menu")) {
                 printSubMenu(menuTitle, menus);
                 continue;
@@ -107,7 +128,7 @@ public class App {
                     // execute 메소드 호출
                     switch (menuTitle) {
                         case "회원":
-                            UserCommand.executeUserCommand(subMenuTitle);
+                            executeUserCommand(subMenuTitle);
                             break;
                         case "팀":
                             executeTeamCommand(subMenuTitle);
@@ -128,6 +149,69 @@ public class App {
         }
     }
 
+    static void executeUserCommand(String command) {
+        System.out.printf("[%s]\n", command);
+
+        int userNo = 0;
+        switch (command) {
+            case "등록":
+                name[memberLength] = prompt("이름?");
+                email[memberLength] = prompt("이메일?");
+                password[memberLength] = prompt("암호?");
+                tel[memberLength] = prompt("연락처?");
+                memberLength++;
+                // System.out.printf("%s, %s, %s, %s\n", name, email, password, tel);
+                break;
+            case "조회":
+                userNo = Integer.parseInt(prompt("회원번호?"));
+                if (userNo < 1 || userNo > memberLength) {
+                    System.out.println("없는 회원입니다.");
+                    return; // 메서드를 나가버리기.
+                }
+                System.out.printf("이름: %s\n", name[userNo - 1]);
+                System.out.printf("이메일: %s\n", email[userNo - 1]);
+                System.out.printf("연락처: %s\n", tel[userNo - 1]);
+                break;
+            case "목록":
+                System.out.println("번호 이름 이메일");
+                for (int i = 0; i < memberLength; i++) {
+                    System.out.printf("%d %s %s\n", (i + 1), name[i], email[i]);
+                }
+                break;
+            case "변경":
+                userNo = Integer.parseInt(prompt("회원번호?"));
+                if (userNo < 1 || userNo > memberLength) {
+                    System.out.println("없는 회원입니다.");
+                    return; // 메서드를 나가버리기.
+                }
+                name[userNo - 1] = prompt(String.format("이름(%s)?", name[userNo - 1]));
+                email[userNo - 1] = prompt(String.format("이메일(%s)?", email[userNo - 1]));
+                password[userNo - 1] = prompt("암호?");
+                tel[userNo - 1] = prompt(String.format("연락처(%s)?", tel[userNo - 1]));
+                System.out.println("변경했습니다.");
+                break;
+            case "삭제":
+                userNo = Integer.parseInt(prompt("회원번호?"));
+                if (userNo < 1 || userNo > memberLength) {
+                    System.out.println("없는 회원입니다.");
+                    return; // 메서드를 나가버리기.
+                }
+                // 다음 값을 앞으로 당긴다.
+                for (int i = userNo; i < memberLength; i++) { // 중간 값들이 당겨짐.
+                    name[i - 1] = name[i]; // 현재 userNo 이후에 있는걸 앞으로 당김.
+                    email[i - 1] = email[i];
+                    password[i - 1] = password[i];
+                    tel[i - 1] = tel[i];
+                }
+                memberLength--; // 마지막 항목을 제거할 때는 for문을 안돌고 --하고 그냥 null 처리됨.
+                // 레퍼런스 카운트 제거 (가비지 처리를 제대로 하기 위함.)
+                name[memberLength] = null;
+                email[memberLength] = null;
+                password[memberLength] = null;
+                tel[memberLength] = null;
+                break;
+        }
+    }
 
     static void executeTeamCommand(String command) {
         System.out.printf("팀 %s\n", command);

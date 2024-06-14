@@ -1,23 +1,35 @@
 package bitcamp.myapp;
 
-public class App {
+import java.util.Scanner;
 
-    static String[] mainMenus = new String[]{"회원", "팀", "프로젝트", "게시판", "도움말", "종료"};
+public class App00 {
+
+    static Scanner keyboardScanner = new Scanner(System.in);
+
+    static String[] mainMenus = new String[] {
+        "회원",
+        "팀",
+        "프로젝트",
+        "게시판",
+        "도움말",
+        "종료"
+    };
+    
     static String[][] subMenus = {
-            {"등록", "목록", "조회", "변경", "삭제"},
-            {"등록", "목록", "조회", "변경", "삭제"},
-            {"등록", "목록", "조회", "변경", "삭제"},
-            {"등록", "목록", "조회", "변경", "삭제"}
+            {"등록", "목록", "조회", "변경", "삭제",},
+            {"등록", "목록", "조회", "변경", "삭제",},
+            {"등록", "목록", "조회", "변경", "삭제",},
+            {"등록", "목록", "조회", "변경", "삭제",},
     };
 
     public static void main(String[] args) {
 
-        printMenu(); // 메서드에 묶인 코드를 실행하는 것을 "메서드를 호출(call)한다"라고 부른다.
+        printMenu();
 
         String command;
         while (true) {
             try {
-                command = Prompt.Input("메인>");
+                command = prompt("메인");
 
                 if (command.equals("menu")) {
                     printMenu();
@@ -30,7 +42,7 @@ public class App {
                     } else if (menuTitle.equals("종료")) {
                         break;
                     } else {
-                        if (menuNo >= 1 && menuNo <= 4) {
+                        if (menuNo >= 1 && menuNo <= subMenus.length) {
                             processMenu(menuTitle, subMenus[menuNo - 1]);
                         } else {
                             System.out.println(menuTitle);
@@ -44,7 +56,7 @@ public class App {
 
         System.out.println("종료합니다.");
 
-        Prompt.close();
+        keyboardScanner.close();
     }
 
     static void printMenu() {
@@ -71,73 +83,53 @@ public class App {
 
     static void printSubMenu(String menuTitle, String[] menus) {
         System.out.printf("[%s]\n", menuTitle);
+
         for (int i = 0; i < menus.length; i++) {
             System.out.printf("%d. %s\n", (i + 1), menus[i]);
         }
+
         System.out.println("9. 이전");
+    }
+
+    static String prompt(String title) {
+        System.out.printf("%s> ", title);
+        return keyboardScanner.nextLine();
     }
 
     static boolean isValidateMenu(int menuNo, String[] menus) {
         return menuNo >= 1 && menuNo <= menus.length;
     }
 
-    static String getMenuTitle(int menuNo, String[] menus) {
+    static String getMenuTitle(int menuNo, String[]menus) {
         return isValidateMenu(menuNo, menus) ? menus[menuNo - 1] : null;
     }
 
     static void processMenu(String menuTitle, String[] menus) {
         printSubMenu(menuTitle, menus);
-        while (true) {
-            // String.format - String 클래스에 내장된 format: printf처럼 쓸 수 있다.
-            String command = Prompt.Input(String.format("메인/%s>", menuTitle));
-            if (command.equals("menu")) {
-                printSubMenu(menuTitle, menus);
-                continue;
-            } else if (command.equals("9")) { // 이전 메뉴 선택
-                break;
-            }
 
+        while (true) {
             try {
-                int menuNo = Integer.parseInt(command);
-                String subMenuTitle = getMenuTitle(menuNo, menus);
-                if (subMenuTitle == null) {
-                    System.out.println("유효한 메뉴 번호가 아닙니다.");
+                String command = prompt("메인/" + menuTitle);
+
+                if (command.equals("menu")) {
+                    printSubMenu(menuTitle, menus);
+                } else if (command.equals("9")) {
+                    break;
                 } else {
-                    // System.out.println(subMenuTitle);
-                    // execute 메소드 호출
-                    switch (menuTitle) {
-                        case "회원":
-                            UserCommand.executeUserCommand(subMenuTitle);
-                            break;
-                        case "팀":
-                            executeTeamCommand(subMenuTitle);
-                            break;
-                        case "프로젝트":
-                            executeProjectCommand(subMenuTitle);
-                            break;
-                        case "게시판":
-                            executeBoardCommand(subMenuTitle);
-                            break;
-                        default:
-                            System.out.printf("%s 메뉴의 명령을 처리할 수 없습니다.\n", menuTitle);
+                    int menuNo = Integer.parseInt(command);
+                    String subMenuTitle = getMenuTitle(menuNo, menus);
+
+                    if (subMenuTitle == null) {
+                        System.out.println("유효한 메뉴 번호가 아닙니다.");
+                    } else {
+                        System.out.println(getMenuTitle(menuNo, menus));
                     }
                 }
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException e) {
                 System.out.println("숫자로 메뉴 번호를 입력하세요.");
             }
+
         }
     }
 
-
-    static void executeTeamCommand(String command) {
-        System.out.printf("팀 %s\n", command);
-    }
-
-    static void executeProjectCommand(String command) {
-        System.out.printf("프로젝트 %s\n", command);
-    }
-
-    static void executeBoardCommand(String command) {
-        System.out.printf("게시판 %s\n", command);
-    }
 }
