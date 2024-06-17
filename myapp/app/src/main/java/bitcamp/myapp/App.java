@@ -17,7 +17,7 @@ public class App {
         String command;
         while (true) {
             try {
-                command = Prompt.input("메인>");
+                command = Prompt.Input("메인>");
 
                 if (command.equals("menu")) {
                     printMenu();
@@ -89,7 +89,7 @@ public class App {
         printSubMenu(menuTitle, menus);
         while (true) {
             // String.format - String 클래스에 내장된 format: printf처럼 쓸 수 있다.
-            String command = Prompt.input(String.format("메인/%s>", menuTitle));
+            String command = Prompt.Input(String.format("메인/%s>", menuTitle));
             if (command.equals("menu")) {
                 printSubMenu(menuTitle, menus);
                 continue;
@@ -110,7 +110,7 @@ public class App {
                             UserCommand.executeUserCommand(subMenuTitle);
                             break;
                         case "팀":
-                            TeamCommand.executeTeamCommand(subMenuTitle);
+                            executeTeamCommand(subMenuTitle);
                             break;
                         case "프로젝트":
                             executeProjectCommand(subMenuTitle);
@@ -126,6 +126,11 @@ public class App {
                 System.out.println("숫자로 메뉴 번호를 입력하세요.");
             }
         }
+    }
+
+
+    static void executeTeamCommand(String command) {
+        System.out.printf("팀 %s\n", command);
     }
 
     static void executeProjectCommand(String command) {

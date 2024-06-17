@@ -32,10 +32,10 @@ public class UserCommand01 {
 
     // 등록
     static void addUser() {
-        name[memberLength] = Prompt.Input("이름?");
-        email[memberLength] = Prompt.Input("이메일?");
-        password[memberLength] = Prompt.Input("암호?");
-        tel[memberLength] = Prompt.Input("연락처?");
+        name[memberLength] = Prompt.input("이름?");
+        email[memberLength] = Prompt.input("이메일?");
+        password[memberLength] = Prompt.input("암호?");
+        tel[memberLength] = Prompt.input("연락처?");
         memberLength++;
     }
 
@@ -49,7 +49,7 @@ public class UserCommand01 {
 
     // 조회
     static void viewUser() {
-        int userNo = Integer.parseInt(Prompt.Input("회원번호?")); // prompt가 있는 클래스를 알려주기.(App 클래스에 있다.)
+        int userNo = Integer.parseInt(Prompt.input("회원번호?")); // prompt가 있는 클래스를 알려주기.(App 클래스에 있다.)
         if (userNo < 1 || userNo > memberLength) {
             System.out.println("없는 회원입니다.");
             return; // 메서드를 나가버리기.
@@ -61,21 +61,21 @@ public class UserCommand01 {
 
     // 변경
     static void updateUser() {
-        int userNo = Integer.parseInt(Prompt.Input("회원번호?"));
+        int userNo = Integer.parseInt(Prompt.input("회원번호?"));
         if (userNo < 1 || userNo > memberLength) {
             System.out.println("없는 회원입니다.");
             return; // 메서드를 나가버리기.
         }
-        name[userNo - 1] = Prompt.Input(String.format("이름(%s)?", name[userNo - 1]));
-        email[userNo - 1] = Prompt.Input(String.format("이메일(%s)?", email[userNo - 1]));
-        password[userNo - 1] = Prompt.Input("암호?");
-        tel[userNo - 1] = Prompt.Input(String.format("연락처(%s)?", tel[userNo - 1]));
+        name[userNo - 1] = Prompt.input(String.format("이름(%s)?", name[userNo - 1]));
+        email[userNo - 1] = Prompt.input(String.format("이메일(%s)?", email[userNo - 1]));
+        password[userNo - 1] = Prompt.input("암호?");
+        tel[userNo - 1] = Prompt.input(String.format("연락처(%s)?", tel[userNo - 1]));
         System.out.println("변경했습니다.");
     }
 
     // 삭제
     static void deleteUser() {
-        int userNo = Integer.parseInt(Prompt.Input("회원번호?"));
+        int userNo = Integer.parseInt(Prompt.input("회원번호?"));
         if (userNo < 1 || userNo > memberLength) {
             System.out.println("없는 회원입니다.");
             return; // 메서드를 나가버리기.
