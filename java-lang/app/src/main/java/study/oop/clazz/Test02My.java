@@ -2,7 +2,7 @@
 
 package study.oop.clazz;
 
-import study.oop.clazz.vo.Score;
+import study.oop.clazz.domain.Score;
 
 // 연습: 클래스 문법을 데이터 타입 정의하는 용도로 사용
 public class Test02My {

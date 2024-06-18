@@ -29,8 +29,9 @@ public class Test01My {
      * Calculator.divide(c1, 3); // 2 + 3 - 1 * 7 / 3 (계산식1)
      *
      *
-     * System.out.printf("result1 = %d\n", c1.result); System.out.printf("result2 = %d\n",
-     * c2.result);
+     * // 클래스 변수가 아닌 인스턴스 변수로 접근해야한다. 
+     * // System.out.printf("result1 = %d\n", c1.result);
+     * // System.out.printf("result2 = %d\n", c2.result);
      */
 
     /*

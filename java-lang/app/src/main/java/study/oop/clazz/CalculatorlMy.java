@@ -19,6 +19,7 @@ public class CalculatorlMy {
    */
   // 인스턴스 필드를 사용할 때는 파라미터로 표현?
 
+  // 인스턴스 메서드를 사용할 때는 static을 사용하면 안된다.
   void plus(int a) {
     this.result += a;
   }

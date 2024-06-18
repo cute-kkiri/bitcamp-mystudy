@@ -16,7 +16,7 @@ public class TeamCommand {
             case "등록":
                 Team team = new Team();
                 team.teamName = Prompt.input("팀명?");
-                teams[teamLength++] = team;
+                // teams[teamLength++] = team;
                 while (true) {
                     int userNo = Integer.parseInt(Prompt.input("추가할 팀원 번호?(종료: 0)"));
 
@@ -26,7 +26,9 @@ public class TeamCommand {
                     } else if (userNo > UserCommand.userLength) {
                         System.out.println("없는 팀원입니다.");
                     } else {
-                        System.out.println(team);
+                        team.teamUser[teamUserLength++] = team.teamName;
+                        System.out.println(team.teamUser);
+                        teams[teamLength++] = team;
                     }
                 }
                 break;

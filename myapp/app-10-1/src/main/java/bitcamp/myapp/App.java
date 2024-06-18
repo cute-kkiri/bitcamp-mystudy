@@ -1,13 +1,10 @@
 package bitcamp.myapp;
 
-import bitcamp.myapp.command.ProjectCommand;
-import bitcamp.myapp.command.UserCommand;
-import bitcamp.myapp.util.Prompt;
-
 public class App {
 
-    static String[] mainMenus = new String[]{"회원", "프로젝트", "게시판", "도움말", "종료"};
+    static String[] mainMenus = new String[]{"회원", "팀", "프로젝트", "게시판", "도움말", "종료"};
     static String[][] subMenus = {
+            {"등록", "목록", "조회", "변경", "삭제"},
             {"등록", "목록", "조회", "변경", "삭제"},
             {"등록", "목록", "조회", "변경", "삭제"},
             {"등록", "목록", "조회", "변경", "삭제"}
@@ -20,7 +17,7 @@ public class App {
         String command;
         while (true) {
             try {
-                command = Prompt.input("메인>");
+                command = Prompt.Input("메인>");
 
                 if (command.equals("menu")) {
                     printMenu();
@@ -33,7 +30,7 @@ public class App {
                     } else if (menuTitle.equals("종료")) {
                         break;
                     } else {
-                        if (menuNo >= 1 && menuNo <= 3) {
+                        if (menuNo >= 1 && menuNo <= 4) {
                             processMenu(menuTitle, subMenus[menuNo - 1]);
                         } else {
                             System.out.println(menuTitle);
@@ -55,7 +52,7 @@ public class App {
         String redAnsi = "\033[31m";
         String resetAnsi = "\033[0m";
 
-        String appTitle = "[프로젝트 관리 시스템]";
+        String appTitle = "[팀 프로젝트 관리 시스템]";
         String line = "----------------------------------";
 
         System.out.println(boldAnsi + line + resetAnsi);
@@ -92,7 +89,7 @@ public class App {
         printSubMenu(menuTitle, menus);
         while (true) {
             // String.format - String 클래스에 내장된 format: printf처럼 쓸 수 있다.
-            String command = Prompt.input(String.format("메인/%s>", menuTitle));
+            String command = Prompt.Input(String.format("메인/%s>", menuTitle));
             if (command.equals("menu")) {
                 printSubMenu(menuTitle, menus);
                 continue;
@@ -112,8 +109,11 @@ public class App {
                         case "회원":
                             UserCommand.executeUserCommand(subMenuTitle);
                             break;
+                        case "팀":
+                            executeTeamCommand(subMenuTitle);
+                            break;
                         case "프로젝트":
-                            ProjectCommand.executeProjectCommand(subMenuTitle);
+                            executeProjectCommand(subMenuTitle);
                             break;
                         case "게시판":
                             executeBoardCommand(subMenuTitle);
@@ -126,6 +126,15 @@ public class App {
                 System.out.println("숫자로 메뉴 번호를 입력하세요.");
             }
         }
+    }
+
+
+    static void executeTeamCommand(String command) {
+        System.out.printf("팀 %s\n", command);
+    }
+
+    static void executeProjectCommand(String command) {
+        System.out.printf("프로젝트 %s\n", command);
     }
 
     static void executeBoardCommand(String command) {
