@@ -1,5 +1,6 @@
 package bitcamp.myapp;
 
+import bitcamp.myapp.command.BoardCommand;
 import bitcamp.myapp.command.ProjectCommand;
 import bitcamp.myapp.command.UserCommand;
 import bitcamp.myapp.util.Prompt;
@@ -116,7 +117,7 @@ public class App {
                             ProjectCommand.executeProjectCommand(subMenuTitle);
                             break;
                         case "게시판":
-                            executeBoardCommand(subMenuTitle);
+                            BoardCommand.executeBoardCommand(subMenuTitle);
                             break;
                         default:
                             System.out.printf("%s 메뉴의 명령을 처리할 수 없습니다.\n", menuTitle);
