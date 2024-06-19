@@ -3,8 +3,6 @@ package bitcamp.myapp.command;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.Board;
 
-import java.util.Date;
-
 public class BoardCommand {
     private static final int MAX_SIZE = 100;
     private static Board[] boards = new Board[MAX_SIZE]; // 사용자 정의 데이터
@@ -15,76 +13,75 @@ public class BoardCommand {
 
         switch (command) {
             case "등록":
-                addBoard();
+                addUser();
                 break;
             case "조회":
-                viewBoard();
+                viewUser();
                 break;
             case "목록":
-                listBoard();
+                listUser();
                 break;
             case "변경":
-                updateBoard();
+                updateUser();
                 break;
             case "삭제":
-                deleteBoard();
+                deleteUser();
                 break;
         }
     }
 
     // 등록
-    private static void addBoard() {
+    private static void addUser() {
         Board board = new Board();
         board.setTitle(Prompt.input("제목?"));
         board.setContent(Prompt.input("내용?"));
-        board.setCreatedDate(new Date()); // 현재 시간 저장.
+        board.setDate(board.getDate());
         boards[boardLength++] = board;
+        System.out.println("등록했습니다.");
     }
 
     // 목록
-    private static void listBoard() {
+    private static void listUser() {
         System.out.println("번호 제목 작성일 조회수");
         for (int i = 0; i < boardLength; i++) {
             Board board = boards[i];
-            System.out.printf("%d %s %tY-%3$tm-%3$td %d\n", (i + 1), board.getTitle(), board.getCreatedDate(), board.getViewCount());
+            System.out.printf("%d %s %s %d\n", (i + 1), board.getTitle(), board.getDate(), i);
         }
     }
 
     // 조회
-    private static void viewBoard() {
+    private static void viewUser() {
+        System.out.println("조회");
         int boardNo = Prompt.inputInt("게시글 번호?");
         if (boardNo < 1 || boardNo > boardLength) {
             System.out.println("없는 게시글입니다.");
             return;
         }
         Board board = boards[boardNo - 1];
-        board.setViewCount(board.getViewCount() + 1);
         System.out.printf("제목: %s\n", board.getTitle());
         System.out.printf("내용: %s\n", board.getContent());
-        System.out.printf("작성일: %tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS\n", board.getCreatedDate());
-        System.out.printf("조회수: %d\n", board.getViewCount());
-
+        System.out.printf("작성일: %s\n", board.getDate());
+        System.out.printf("조회수: %d\n", 1);
     }
 
     // 변경
-    private static void updateBoard() {
+    private static void updateUser() {
         int boardNo = Prompt.inputInt("게시글 번호?");
         if (boardNo < 1 || boardNo > boardLength) {
             System.out.println("없는 게시글입니다.");
             return;
         }
         Board board = boards[boardNo - 1];
-        board.setViewCount(board.getViewCount() + 1);
         board.setTitle(Prompt.input("제목(%s)?", board.getTitle()));
         board.setContent(Prompt.input("내용(%s)?", board.getContent()));
-        System.out.println("변경했습니다.");
+        System.out.println("변경하였습니다.");
     }
 
     // 삭제
-    private static void deleteBoard() {
-        int boardNo = Prompt.inputInt("게시글 번호?");
+    private static void deleteUser() {
+        int boardNo = Prompt.inputInt("프로젝트 번호?");
         if (boardNo < 1 || boardNo > boardLength) {
-            System.out.println("없는 게시글입니다.");
+            System.out.println("없는 프로젝트입니다.");
             return;
         }
         for (int i = boardNo; i < boardLength; i++) {
@@ -93,5 +90,4 @@ public class BoardCommand {
         boards[--boardLength] = null;
         System.out.println("삭제 했습니다.");
     }
-
 }
