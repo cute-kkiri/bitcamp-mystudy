@@ -198,11 +198,24 @@
 
 ## 17일차(2024-06-18,화)
 - 실습 프로젝트
+- GRASP 방법론
   - 10. CRUD 구현하기
     - 프로젝트
 
 ## 18일차(2024-06-19,수)
-- Method Area, JVM Stack, Heap 복습
+- 자바 기초 프로그래밍
+  - 클래스 사용법(계속)
+  - Method Area, JVM Stack, Heap 복습
+- 클래스 정의와 방법론: Design Patterns(GoF)
+  - GRASP 방법론, SOLID OOP 설계원칙
 - 실습 프로젝트
   - 10. CRUD 구현하기
     - 게시판
+
+## 19일차(2024-06-20,목)
+- 자바 기초 프로그래밍
+  - 클래스 사용법(계속)
+- GRASP - High Cohesion 기법
+- 실습 프로젝트
+  - 11. 데이터 식별 번호 부여하기
+  - 12. 인스턴스 목록을 다루는 코드를 분리하기 : GRASP의 High Cohesion 설계 패턴

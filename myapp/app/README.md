@@ -1,49 +1,39 @@
-# 07. 문자열 비교와 데이터 변환 다루기
+# 12. 인스턴스 목록을 다루는 코드를 분리하기 : GRASP의 High Cohesion 설계 패턴
 
 ## 학습목표
 
-- String.equals() 메서드를 활용할 수 있다.
-- Integer.parseInt() 메서드를 활용할 수 있다.
-- Scanner의 nextInt(), next(), nextLine()을 구분하여 사용할 수 있다.
+- GRASP 방법론의 High Cohesion 설계 패턴을 적용할 수 있다.
+- 캡슐화(encapsulation)를 이해하고 설명할 수 있다.
 
-## 요구사항 
+## 요구사항
 
-- 'menu' 명령을 입력하면 메뉴 목록을 출력
+- GRASP 방법론의 High Cohesion 설계 패턴에 따라 UserCommand 클래스의 역할을 쪼갠다.
+  - UserCommand 클래스는 UI를 처리하는 역할에 집중한다.
+- ProjectCommand, BoardCommand 클래스도 UserCommand 클래스처럼 처리한다.
 
 ## 실행 결과
 
-```
-----------------------------------------------  
-[팀 프로젝트 관리 시스템]  
+- 실행 결과 변경 없음
 
-1. 회원
-2. 팀
-3. 프로젝트
-4. 게시판
-5. 도움말
-6. 종료  
-----------------------------------------------  
-> menu
-----------------------------------------------  
-[팀 프로젝트 관리 시스템]  
-
-1. 회원
-2. 팀
-3. 프로젝트
-4. 게시판
-5. 도움말
-6. 종료  
-----------------------------------------------
-```
 
 ## 작업
 
-- 1) 사용자 입력을 nextLine()을 사용하여 줄 단위로 처리한다.
-- 2) "menu" 명령을 처리한다.
-- 3) 그 외 명령은 정수 값으로 변환하여 처리한다.
-- 4) nextInt() 대신 nextLine() 사용에 맞춰 예외처리를 변경한다.
-
+- UserCommand에서 인스턴스 목록을 다루는 역할을 다른 클래스로 분리한다.
+  - UserList 클래스 추가: User 인스턴스 목록에 인스턴스를 보관하는 일을 담당한다. 
+  - UserCommand 클래스 변경: UserList를 통해 데이터를 처리하고 UI 처리를 전담한다.
+- ProjectCommand에서 인스턴스 목록을 다루는 역할을 다른 클래스로 분리한다.
+  - ProjectList 클래스 추가: Project 인스턴스 목록에 인스턴스를 보관하는 일을 담당한다.
+  - ProjectCommand 클래스 변경: ProjectList를 통해 데이터를 처리하고 UI 처리를 전담한다.
+- BoardCommand에서 인스턴스 목록을 다루는 역할을 다른 클래스로 분리한다.
+  - BoardList 클래스 추가: Board 인스턴스 목록에 인스턴스를 보관하는 일을 담당한다.
+  - BoardCommand 클래스 변경: BoardList를 통해 데이터를 처리하고 UI 처리를 전담한다.
+  
 ## 소스 파일
 
 - App.java
-
+- UserCommand.java
+- ProjectCommand.java
+- BoardCommand.java
+- UserList.java
+- ProjectList.java
+- BoardList.java
