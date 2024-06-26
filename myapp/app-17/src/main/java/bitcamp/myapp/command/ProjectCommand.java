@@ -134,17 +134,14 @@ public class ProjectCommand {
     }
 
     private void deleteMembers(Project project) { // 일관성
-        Object[] members = project.getMembers().toArray();
-
-        for (Object obj : members) {
-            int index = project.getMembers().indexOf(obj);
-            User member = (User) obj;
-            String str = Prompt.input("팀원(%s) 삭제?", member.getName());
+        for (int i = 0; i < project.getMembers().size(); i++) {
+            User user = (User) project.getMembers().get(i);
+            String str = Prompt.input("팀원(%s) 삭제?", user.getName());
             if (str.equalsIgnoreCase("y")) {
-                project.getMembers().remove(index);
-                System.out.printf("'%s' 팀원을 삭제합니다.\n", member.getName());
+                project.getMembers().remove(i);
+                System.out.printf("'%s' 팀원을 삭제합니다.\n", user.getName());
             } else {
-                System.out.printf("'%s' 팀원을 유지합니다.\n", member.getName());
+                System.out.printf("'%s' 팀원을 유지합니다.\n", user.getName());
             }
         }
     }

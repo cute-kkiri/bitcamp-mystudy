@@ -1,13 +1,11 @@
 package bitcamp.myapp.command;
 
-import bitcamp.myapp.util.LinkedList;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.User;
 
 public class UserCommand {
 
-    // 이렇게 해서 UserList 클래스가 필요없어진다.
-    LinkedList userList = new LinkedList();
+    UserList userList = new UserList(); // 패키지 private
 
     public void executeUserCommand(String command) {
         System.out.printf("[%s]\n", command);
@@ -37,20 +35,22 @@ public class UserCommand {
         user.setPassword(Prompt.input("암호?"));
         user.setTel(Prompt.input("연락처?"));
         user.setNo(User.getNextSeqNo());
-        userList.add(user);
+        userList.append(user);
     }
 
     private void listUser() {
         System.out.println("번호 이름 이메일");
-        for (Object obj : userList.toArray()) {
+        for (Object obj : userList.getArray()) { // toArray가 리턴하는 값이 Object type이기 때문에 Object로 해야 문법오류가 아님.
+            // 컴파일러는 문법만 따지기 때문에 Object를 User라고 알려주는 것.
             User user = (User) obj;
+            // System.out.printf("%d %s %s\n", ((User)user).getNo(), ((User)user).getName(), ((User)user).getEmail());
             System.out.printf("%d %s %s\n", user.getNo(), user.getName(), user.getEmail());
         }
     }
 
     private void viewUser() {
         int userNo = Prompt.inputInt("회원번호?");
-        User user = (User) userList.get(userList.indexOf(new User(userNo)));
+        User user = userList.findByNo(userNo);
         if (user == null) {
             System.out.println("없는 회원입니다.");
             return;
@@ -63,7 +63,7 @@ public class UserCommand {
 
     private void updateUser() {
         int userNo = Prompt.inputInt("회원번호?");
-        User user = (User) userList.get(userList.indexOf(new User(userNo)));
+        User user = userList.findByNo(userNo);
         if (user == null) {
             System.out.println("없는 회원입니다.");
             return;
@@ -78,16 +78,16 @@ public class UserCommand {
 
     private void deleteUser() {
         int userNo = Prompt.inputInt("회원번호?");
-        User deletedUser = (User) userList.get(userList.indexOf(new User(userNo)));
+        User deletedUser = userList.findByNo(userNo);
         if (deletedUser != null) {
-            userList.remove(userList.indexOf(deletedUser));
+            userList.delete(userList.index(deletedUser));
             System.out.printf("'%s' 회원을 삭제 했습니다.\n", deletedUser.getName());
         } else {
             System.out.println("없는 회원입니다.");
         }
     }
 
-    public LinkedList getUserList() {
+    public UserList getUserList() {
         return userList;
     }
 
