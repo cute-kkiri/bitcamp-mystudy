@@ -1,21 +1,22 @@
 package bitcamp.myapp.util;
 
-public class LinkedList extends AbstractList {
+public class LinkedList implements List {
 
-    private Node first;
-    private Node last;
+    Node first;
+    Node last;
+    int size;
 
     @Override
     public void add(Object value) {
         Node newNode = new Node(value);
 
-        if (first == null) { // 리스트가 비어있는 경우.
+        if (first == null) {
             last = first = newNode;
         } else {
             last.next = newNode;
             last = newNode;
         }
-        size++;  // 배열 추가할 때마다 증가
+        size++;
     }
 
     @Override
@@ -34,7 +35,6 @@ public class LinkedList extends AbstractList {
             cursor = cursor.next;
             currentIndex++;
         }
-
         return null;
     }
 
@@ -45,9 +45,8 @@ public class LinkedList extends AbstractList {
         }
 
         Node deletedNode = null;
-        size--; // delete할 때마다 줄이기.
+        size--;
 
-        // 첫 노드일 때
         if (index == 0) {
             deletedNode = first;
             first = first.next;
@@ -57,29 +56,24 @@ public class LinkedList extends AbstractList {
             return deletedNode.value;
         }
 
-        // 중간 노드일 때
         Node cursor = first;
         int currentIndex = 0;
 
         while (cursor != null) {
-            if (currentIndex == index - 1) {
-                // 삭제할 노드의 전 노드에서
+            if (currentIndex == (index - 1)) {
                 break;
             }
-
             cursor = cursor.next;
             currentIndex++;
         }
 
         deletedNode = cursor.next;
-
-        // 삭제할 노드에 있는 next의 주소를 current cursor next에 담는다.
         cursor.next = cursor.next.next;
 
-        // 마지막 노드일 때
         if (cursor.next == null) {
             last = cursor;
         }
+
         return deletedNode.value;
     }
 
@@ -95,7 +89,6 @@ public class LinkedList extends AbstractList {
             cursor = cursor.next;
             currentIndex++;
         }
-
         return -1;
     }
 
@@ -110,5 +103,10 @@ public class LinkedList extends AbstractList {
         }
 
         return arr;
+    }
+
+    @Override
+    public int size() {
+        return size;
     }
 }

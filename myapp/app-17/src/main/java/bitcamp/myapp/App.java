@@ -7,6 +7,7 @@ import bitcamp.myapp.util.Prompt;
 
 public class App {
 
+
     String[] mainMenus = new String[]{"회원", "프로젝트", "게시판", "공지사항", "도움말", "종료"};
     String[][] subMenus = {
             {"등록", "목록", "조회", "변경", "삭제"},
@@ -16,21 +17,18 @@ public class App {
             {}
     };
 
-    UserCommand userCommand = new UserCommand(); // 회원
-    BoardCommand boardCommand = new BoardCommand(); // 게시판
-    BoardCommand noticeCommand = new BoardCommand(); // 공지사항
+    UserCommand userCommand = new UserCommand();
+    BoardCommand boardCommand = new BoardCommand();
+    BoardCommand noticeCommand = new BoardCommand();
     ProjectCommand projectCommand = new ProjectCommand(userCommand.getUserList());
 
-    public static void main(String[] args) {
-        // App app = new App();
-        // app.execute();
 
-        // 한 번만 호출하니까 위에서 변수 선언해서 사용하는 대신 이렇게 사용.
+    public static void main(String[] args) {
         new App().execute();
     }
 
     void execute() {
-        printMenu(); // 메서드에 묶인 코드를 실행하는 것을 "메서드를 호출(call)한다"라고 부른다.
+        printMenu();
 
         String command;
         while (true) {
@@ -57,6 +55,7 @@ public class App {
         }
 
         System.out.println("종료합니다.");
+
         Prompt.close();
     }
 
@@ -71,11 +70,11 @@ public class App {
         System.out.println(boldAnsi + line + resetAnsi);
         System.out.println(boldAnsi + appTitle + resetAnsi);
 
-        for (int i = 0; i < this.mainMenus.length; i++) {
-            if (this.mainMenus[i].equals("종료")) {
-                System.out.printf("%s%d. %s%s\n", (boldAnsi + redAnsi), (i + 1), this.mainMenus[i], resetAnsi);
+        for (int i = 0; i < mainMenus.length; i++) {
+            if (mainMenus[i].equals("종료")) {
+                System.out.printf("%s%d. %s%s\n", (boldAnsi + redAnsi), (i + 1), mainMenus[i], resetAnsi);
             } else {
-                System.out.printf("%d. %s\n", (i + 1), this.mainMenus[i]);
+                System.out.printf("%d. %s\n", (i + 1), mainMenus[i]);
             }
         }
 
@@ -121,16 +120,16 @@ public class App {
                 } else {
                     switch (menuTitle) {
                         case "회원":
-                            this.userCommand.executeUserCommand(subMenuTitle);
+                            userCommand.execute(subMenuTitle);
                             break;
                         case "프로젝트":
-                            this.projectCommand.executeProjectCommand(subMenuTitle);
+                            projectCommand.execute(subMenuTitle);
                             break;
                         case "게시판":
-                            this.boardCommand.executeBoardCommand(subMenuTitle);
+                            boardCommand.execute(subMenuTitle);
                             break;
                         case "공지사항":
-                            this.noticeCommand.executeBoardCommand(subMenuTitle);
+                            noticeCommand.execute(subMenuTitle);
                             break;
                         default:
                             System.out.printf("%s 메뉴의 명령을 처리할 수 없습니다.\n", menuTitle);

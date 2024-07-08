@@ -4,14 +4,25 @@ import bitcamp.myapp.util.LinkedList;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.User;
 
-public class UserCommand {
+public class UserCommand extends AbstractCommand {
 
-    // 이렇게 해서 UserList 클래스가 필요없어진다.
+    String[] menus = {"등록", "목록", "조회", "변경", "삭제"};
+
     LinkedList userList = new LinkedList();
 
-    public void executeUserCommand(String command) {
-        System.out.printf("[%s]\n", command);
-        switch (command) {
+    public UserCommand(String menuTitle) {
+        super(menuTitle);
+    }
+
+    @Override
+    protected String[] getMenus() {
+        return menus;
+    }
+
+    @Override
+    protected void processMenu(String menuName) {
+        System.out.printf("[%s]\n", menuName);
+        switch (menuName) {
             case "등록":
                 this.addUser();
                 break;

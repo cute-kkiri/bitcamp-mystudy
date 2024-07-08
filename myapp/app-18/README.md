@@ -1,39 +1,45 @@
-# 12. 인스턴스 목록을 다루는 코드를 분리하기 : GRASP의 High Cohesion 설계 패턴
+# 17. 인터페이스를 이용한 객체 사용 규칙 정의: 목록을 다루는 규칙
 
 ## 학습목표
 
-- GRASP 방법론의 High Cohesion 설계 패턴을 적용할 수 있다.
-- 캡슐화(encapsulation)를 이해하고 설명할 수 있다.
+- 인터페이스를 이용하여 객체 사용 규칙을 정의하고 사용할 수 있다.
+- 패키지를 이용하여 클래스를 분류할 수 있다.
+- equals()의 용도를 이해하고 재정의하여 사용할 수 있다.
 
 ## 요구사항
 
-- GRASP 방법론의 High Cohesion 설계 패턴에 따라 UserCommand 클래스의 역할을 쪼갠다.
-  - UserCommand 클래스는 UI를 처리하는 역할에 집중한다.
-- ProjectCommand, BoardCommand 클래스도 UserCommand 클래스처럼 처리한다.
+- ArrayList와 LinkedList의 사용 규칙을 통일하기
+- 목록을 다루는 것과 관련된 클래스를 다른 프로젝트에서 재사용하기 쉽게 분류하기
+- UserList, ProjectList, BoardList 클래스를 제거하고 ArrayList, LinkedList를 직접 사용하기
 
 ## 실행 결과
 
-- 실행 결과 변경 없음
+- 이전과 같다.
 
 
 ## 작업
 
-- UserCommand에서 인스턴스 목록을 다루는 역할을 다른 클래스로 분리한다.
-  - UserList 클래스 추가: User 인스턴스 목록에 인스턴스를 보관하는 일을 담당한다. 
-  - UserCommand 클래스 변경: UserList를 통해 데이터를 처리하고 UI 처리를 전담한다.
-- ProjectCommand에서 인스턴스 목록을 다루는 역할을 다른 클래스로 분리한다.
-  - ProjectList 클래스 추가: Project 인스턴스 목록에 인스턴스를 보관하는 일을 담당한다.
-  - ProjectCommand 클래스 변경: ProjectList를 통해 데이터를 처리하고 UI 처리를 전담한다.
-- BoardCommand에서 인스턴스 목록을 다루는 역할을 다른 클래스로 분리한다.
-  - BoardList 클래스 추가: Board 인스턴스 목록에 인스턴스를 보관하는 일을 담당한다.
-  - BoardCommand 클래스 변경: BoardList를 통해 데이터를 처리하고 UI 처리를 전담한다.
-  
+- 목록을 다루는 객체 사용 규칙을 정의한다.
+  - List 인터페이스 추가 
+- ArrayList와 LinkedList 클래스를 List 규칙에 따라 정의한다.
+  - ArrayList와 LinkedList 변경
+- ArrayList, LinkedList, List 클래스를 별도의 패키지로 분류한다.
+  - 관련 클래스 이동
+- 리팩토링
+  - UserList, ProjectList, BoardList 에서 데이터를 찾는 기능을 equals로 대체 
+  - UserList, ProjectList, BoardList 제거
+- equals() 재정의
+  - Board, Project, User 변경
+  - UserCommand, BoardCommand, ProjectCommand 변경
+
 ## 소스 파일
 
-- App.java
+- List.java
+- ArrayList.java
+- LinkedList.java
 - UserCommand.java
 - ProjectCommand.java
 - BoardCommand.java
-- UserList.java
-- ProjectList.java
-- BoardList.java
+- User.java
+- Project.java
+- Board.java

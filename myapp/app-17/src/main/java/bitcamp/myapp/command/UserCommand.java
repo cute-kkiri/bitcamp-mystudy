@@ -4,14 +4,13 @@ import bitcamp.myapp.util.LinkedList;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.User;
 
-public class UserCommand {
+public class UserCommand implements Command {
 
-    // 이렇게 해서 UserList 클래스가 필요없어진다.
     LinkedList userList = new LinkedList();
 
-    public void executeUserCommand(String command) {
-        System.out.printf("[%s]\n", command);
-        switch (command) {
+    public void execute(String name) {
+        System.out.printf("[%s]\n", name);
+        switch (name) {
             case "등록":
                 this.addUser();
                 break;

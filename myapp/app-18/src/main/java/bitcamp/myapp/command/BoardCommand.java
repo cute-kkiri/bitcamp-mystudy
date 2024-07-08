@@ -6,13 +6,47 @@ import bitcamp.myapp.vo.Board;
 
 import java.util.Date;
 
-public class BoardCommand {
+public class BoardCommand implements Command {
+
+    String menuTitle;
+    String[] menus = {"등록", "목록", "조회", "변경", "삭제"};
 
     LinkedList boardList = new LinkedList();
 
-    public void executeBoardCommand(String command) {
-        System.out.printf("[%s]\n", command);
-        switch (command) {
+    public BoardCommand(String menuTitle) {
+        this.menuTitle = menuTitle;
+    }
+
+    public void execute() {
+        printMenus();
+
+        while (true) {
+            String command = Prompt.input(String.format("메인/%s>", menuTitle));
+            if (command.equals("menu")) {
+                printMenus();
+                continue;
+            } else if (command.equals("9")) { // 이전 메뉴 선택
+                return;
+            }
+
+            try {
+                int menuNo = Integer.parseInt(command);
+                String menuName = getMenuTitle(menuNo);
+                if (menuName == null) {
+                    System.out.println("유효한 메뉴 번호가 아닙니다.");
+                    continue;
+                }
+
+                processMenu(menuName);
+            } catch (NumberFormatException ex) {
+                System.out.println("숫자로 메뉴 번호를 입력하세요.");
+            }
+        }
+    }
+
+    private void processMenu(String menuName) {
+        System.out.printf("[%s]\n", menuName);
+        switch (menuName) {
             case "등록":
                 this.addBoard();
                 break;
@@ -31,19 +65,31 @@ public class BoardCommand {
         }
     }
 
-    private void viewBoard() {
-        int boardNo = Prompt.inputInt("게시글 번호?");
-        Board board = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
-        if (board == null) {
-            System.out.println("없는 게시글입니다.");
-            return;
-        }
+    private String getMenuTitle(int menuNo) {
+        return isValidateMenu(menuNo) ? menus[menuNo - 1] : null;
+    }
 
-        board.setViewCount(board.getViewCount() + 1);
-        System.out.printf("제목: %s\n", board.getTitle());
-        System.out.printf("내용: %s\n", board.getContent());
-        System.out.printf("작성일: %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS\n", board.getCreatedDate());
-        System.out.printf("조회수: %d\n", board.getViewCount());
+    private boolean isValidateMenu(int menuNo) {
+        return menuNo >= 1 && menuNo <= menus.length;
+    }
+
+    private void printMenus() {
+        System.out.printf("[%s]\n", menuTitle);
+        for (int i = 0; i < menus.length; i++) {
+            System.out.printf("%d. %s\n", (i + 1), menus[i]);
+        }
+        System.out.println("9. 이전");
+    }
+
+    private void deleteBoard() {
+        int boardNo = Prompt.inputInt("게시글 번호?");
+        Board deletedBoard = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
+        if (deletedBoard != null) {
+            boardList.remove(boardList.indexOf(deletedBoard));
+            System.out.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
+        } else {
+            System.out.println("없는 게시글입니다.");
+        }
     }
 
     private void updateBoard() {
@@ -60,15 +106,19 @@ public class BoardCommand {
         System.out.println("변경 했습니다.");
     }
 
-    private void deleteBoard() {
+    private void viewBoard() {
         int boardNo = Prompt.inputInt("게시글 번호?");
-        Board deletedBoard = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
-        if (deletedBoard != null) {
-            boardList.remove(boardList.indexOf(deletedBoard));
-            System.out.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
-        } else {
+        Board board = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
+        if (board == null) {
             System.out.println("없는 게시글입니다.");
+            return;
         }
+
+        board.setViewCount(board.getViewCount() + 1);
+        System.out.printf("제목: %s\n", board.getTitle());
+        System.out.printf("내용: %s\n", board.getContent());
+        System.out.printf("작성일: %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS\n", board.getCreatedDate());
+        System.out.printf("조회수: %d\n", board.getViewCount());
     }
 
     private void listBoard() {
@@ -86,7 +136,7 @@ public class BoardCommand {
         board.setContent(Prompt.input("내용?"));
         board.setCreatedDate(new Date());
         board.setNo(Board.getNextSeqNo());
-        boardList.add(board); // this.boardList => BoardList 객체 주소를 담고 있다.
+        boardList.add(board);
     }
 
 }

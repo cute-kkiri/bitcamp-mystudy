@@ -2,31 +2,30 @@ package bitcamp.myapp.util;
 
 import java.util.Arrays;
 
-// 추상 클래스 상속.
 public class ArrayList extends AbstractList {
+
     private static final int MAX_SIZE = 3;
 
     private Object[] list = new Object[MAX_SIZE];
 
-    @Override // 재정의 또는 추상 메서드 구현을 의미
+    @Override // 재정의 또는 추상메서드 구현을 의미
     public void add(Object obj) {
         if (size == list.length) {
             // 1) 우리가 만든 메서드를 사용하여 배열 크기 증가
-            // grow();
+            //grow();
 
             // 2) 자바에서 제공하는 클래스를 사용하여 배열 크기 증가
             int oldSize = list.length;
             int newSize = oldSize + (oldSize >> 1);
-            list = Arrays.copyOf(list, newSize); // 배열 자동 증가 시킬 수 있는 Arrays의 copyOf
+            list = Arrays.copyOf(list, newSize);
         }
-
         list[size++] = obj;
     }
 
     private void grow() {
         int oldSize = list.length;
-        // int newSize = oldSize + (oldSize / 2); // 50% 증가
         int newSize = oldSize + (oldSize >> 1); // 50% 증가
+
         Object[] arr = new Object[newSize]; // 새 배열을 만든다.
 
         for (int i = 0; i < list.length; i++) { // 기존 배열의 값을 복사해온다.
@@ -68,16 +67,17 @@ public class ArrayList extends AbstractList {
         return -1;
     }
 
-    // list 추출
     @Override
     public Object get(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
+        java.util.ArrayList l;
         return list[index];
     }
 
     public boolean contains(Object obj) {
         return indexOf(obj) != -1;
     }
+
 }
