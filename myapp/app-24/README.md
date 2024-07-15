@@ -1,14 +1,12 @@
-# 20. 리팩토링: Map 컬렉션과 의존성 주입
+# 23. 특정 클래스에서만 사용되는 의존 객체는 중첩 클래스로 정의하기
 
 ## 학습목표
 
-- GRASP 설계 지침에서 Low Coupling을 이해하고 적용할 수 있다.
-- SOLID 설계 원칙에서 DIP(Dependency Inversion Principle)를 이해하고 적용할 수 있다.
-- Map 컬렉션 객체를 사용하여 객체를 저장하고 조회할 수 있다.
+- 중첩 클래스의 구동 원리를 이해하고 사용할 수 있다.
 
 ## 요구사항
 
-- 의존 객체를 다룰 때 DIP 설계 원칙을 적용
+- 특정 클래스에서만 사용되는 클래스가 있다면 중첩 클래스로 코드를 정리하기
 
 ## 실행 결과
 
@@ -16,23 +14,29 @@
 
 ## 작업
 
-### Command 구현체 저장 및 실행
+### Node 클래스를 중첩 클래스로 전환
 
-- Map 컬렉션 객체를 사용하여 Command 구현체를 저장
-  - App 클래스: 생성자 추가
-- 메뉴에 대한 Command 구현체를 찾아 실행
-  - App 클래스: processMenu() 변경
+- LinkedList 클래스 변경
+  - Node 클래스를 LinkedList의 static nested class 로 옮긴다.
+  
+### ListIterator 클래스를 중첩 클래스로 전환
 
-### 의존 객체를 외부에서 주입하기(SOLID의 DIP 적용)
-
-- UserCommand, ProjectCommand, BoardCommand 클래스의 의존 객체를 외부에서 주입
-  - 생성자 변경
-- Command 객체가 사용할 List 객체 준비
-  - App 클래스 변경: 생성자 변경
-
+- AbstractList 클래스 변경
+  - ListIterator 클래스를 이 클래스의 static nested class로 옮긴다.
+    - AbstractList01 클래스 참고
+  - ListIterator 클래스를 non-static nested class로 변경한다.
+    - AbstractList02 클래스 참고
+  - ListIterator 클래스를 local class로 변경한다.
+    - AbstractList03 클래스 참고
+  - ListIterator 클래스를 anonymous class로 변경한다.
+    - AbstractList 클래스 참고
+    
 ## 소스 파일
 
-- UserCommand.java
-- ProjectCommand.java
-- BoardCommand.java
-- App.java
+- Node.java (삭제)
+- LinkedList.java
+- ListIterator.java(삭제)
+- AbstractList.java
+  - AbstractList01.java
+  - AbstractList02.java
+  - AbstractList03.java

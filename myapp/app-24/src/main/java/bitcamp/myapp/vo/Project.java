@@ -1,7 +1,8 @@
 package bitcamp.myapp.vo;
 
-import java.util.ArrayList;
-import java.util.List;
+import bitcamp.myapp.util.ArrayList;
+import bitcamp.myapp.util.List;
+
 import java.util.Objects;
 
 public class Project {
@@ -13,16 +14,13 @@ public class Project {
     private String description;
     private String startDate;
     private String endDate;
-    private List members; // 다형적 변수로 변경.
+    private List<User> members;
 
-    // 인스턴스 블록
-    // 생성자의 첫 번째 문장에 초기화.
-    {
-        members = new ArrayList();
+    { // 인스턴스 블록
+        members = new ArrayList<>();
     }
 
     public Project() {
-
     }
 
     public Project(int no) {
@@ -90,7 +88,7 @@ public class Project {
         this.endDate = endDate;
     }
 
-    public List getMembers() {
+    public List<User> getMembers() {
         return members;
     }
 }

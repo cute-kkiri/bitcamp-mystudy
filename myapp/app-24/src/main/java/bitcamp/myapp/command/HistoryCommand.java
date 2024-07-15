@@ -1,12 +1,11 @@
 package bitcamp.myapp.command;
 
 import bitcamp.myapp.util.Prompt;
-
-import java.util.Stack;
+import bitcamp.myapp.util.Stack;
 
 public class HistoryCommand implements Command {
 
-    public void execute(Stack menuPath) {
+    public void execute(Stack<String> menuPath) {
         Prompt.printHistory();
     }
 }

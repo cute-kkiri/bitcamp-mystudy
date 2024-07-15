@@ -1,20 +1,18 @@
 package bitcamp.myapp.command;
 
 import bitcamp.myapp.util.Prompt;
-
-import java.util.Stack;
+import bitcamp.myapp.util.Stack;
 
 public abstract class AbstractCommand implements Command {
 
     protected String menuTitle;
-
 
     public AbstractCommand(String menuTitle) {
         this.menuTitle = menuTitle;
     }
 
     @Override
-    public void execute(Stack menuPath) {
+    public void execute(Stack<String> menuPath) {
         menuPath.push(menuTitle);
 
         printMenus();
@@ -65,17 +63,14 @@ public abstract class AbstractCommand implements Command {
     }
 
     private String getMenuPathTitle(Stack menuPath) {
-        // 메서드 안에서 사용할 때는 builder
-        // 인스턴스로 사용할 때는 buffer를 사용하는 것을 권장.
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder strBuilder = new StringBuilder();
         for (int i = 0; i < menuPath.size(); i++) {
-            if (stringBuilder.length() > 0) {
-                stringBuilder.append("/");
+            if (strBuilder.length() > 0) {
+                strBuilder.append("/");
             }
-            stringBuilder.append(menuPath.get(i));
+            strBuilder.append(menuPath.get(i));
         }
-
-        return stringBuilder.toString();
+        return strBuilder.toString();
     }
 
     // 구체적인 동작은 서브 클래스에서 정의한다.
