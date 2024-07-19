@@ -1,16 +1,12 @@
 package bitcamp.myapp.vo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class Board {
+public class Board implements Serializable {
 
     private static int seqNo;
-
     private int no;
     private String title;
     private String content;
@@ -18,7 +14,6 @@ public class Board {
     private int viewCount;
 
     public Board() {
-
     }
 
     public Board(int no) {
@@ -37,72 +32,25 @@ public class Board {
         return seqNo;
     }
 
-    public static Board valueOf(byte[] bytes) throws IOException {
+    public static Board valueOf(String csv) {
+        String[] values = csv.split(","); // csv: "1,홍길동,hong@test.com,1111,010-1111-2222"
+        Board board = new Board();
+        board.setNo(Integer.parseInt(values[0]));
+        board.setTitle(values[1]);
+        board.setContent(values[2]);
+        board.setCreatedDate(new Date(Long.parseLong(values[3])));
+        board.setViewCount(Integer.parseInt(values[4]));
 
-        try (ByteArrayInputStream in = new ByteArrayInputStream(bytes)) {
-            Board board = new Board();
-            board.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-            byte[] buf = new byte[1000];
-
-            int len = in.read() << 8 | in.read();
-            in.read(buf, 0, len);
-            board.setTitle(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-            len = in.read() << 8 | in.read();
-            in.read(buf, 0, len);
-            board.setContent(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-            board.setCreatedDate(
-                    new Date((long) in.read() << 56 | (long) in.read() << 48
-                            | (long) in.read() << 40 | (long) in.read() << 32
-                            | (long) in.read() << 24 | (long) in.read() << 16
-                            | (long) in.read() << 8 | (long) in.read())
-            );
-
-            board.setViewCount(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-            return board;
-        }
-
+        return board;
     }
 
-    public byte[] getBytes() throws IOException {
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            out.write(no >> 24);
-            out.write(no >> 16);
-            out.write(no >> 8);
-            out.write(no);
-
-            // 규칙정하기
-            byte[] bytes = title.getBytes(StandardCharsets.UTF_8);
-            out.write(bytes.length >> 8);
-            out.write(bytes.length);
-            out.write(bytes);
-
-            bytes = content.getBytes(StandardCharsets.UTF_8);
-            out.write(bytes.length >> 8);
-            out.write(bytes.length);
-            out.write(bytes);
-
-            long millis = createdDate.getTime();
-            out.write((int) (millis >> 56));
-            out.write((int) (millis >> 48));
-            out.write((int) (millis >> 40));
-            out.write((int) (millis >> 32));
-            out.write((int) (millis >> 24));
-            out.write((int) (millis >> 16));
-            out.write((int) (millis >> 8));
-            out.write((int) (millis));
-
-            int count = viewCount;
-            out.write(count >> 24);
-            out.write(count >> 16);
-            out.write(count >> 8);
-            out.write(count);
-
-            return out.toByteArray(); // return 하기 전에 out.close()가 자동 호출된다.
-        }
+    public String toCsvString() {
+        return new StringBuilder()
+                .append(no).append(",")
+                .append(title).append(",")
+                .append(content).append(",")
+                .append(createdDate.getTime()).append(",")
+                .append(viewCount).toString();
     }
 
     @Override
