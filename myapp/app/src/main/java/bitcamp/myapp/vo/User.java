@@ -7,7 +7,7 @@ import java.util.Objects;
 // - 추상 메서드가 없다.
 // - 직렬화/역직렬화를 승인한다는 표시로 사용한다.
 // - 유사한 예) Cloneable 인터페이스
-public class User implements Serializable {
+public class User implements Serializable, SequenceNo {
 
     private static int seqNo;
 
@@ -44,7 +44,6 @@ public class User implements Serializable {
         user.setEmail(values[2]);
         user.setPassword(values[3]);
         user.setTel(values[4]);
-
         return user;
     }
 
@@ -61,6 +60,17 @@ public class User implements Serializable {
 
         User user2 = User.valueOf(csv);
         System.out.println(user2);
+
+    }
+
+    public String toCsvString() {
+        return new StringBuilder()
+                .append(no).append(",")
+                .append(name).append(",")
+                .append(email).append(",")
+                .append(password).append(",")
+                .append(tel)
+                .toString();
     }
 
     @Override
@@ -72,15 +82,6 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", tel='" + tel + '\'' +
                 '}';
-    }
-
-    public String toCsvString() {
-        return new StringBuilder()
-                .append(no).append(",")
-                .append(name).append(",")
-                .append(email).append(",")
-                .append(password).append(",")
-                .append(tel).toString();
     }
 
     @Override
@@ -100,6 +101,7 @@ public class User implements Serializable {
         return Objects.hashCode(no);
     }
 
+    @Override
     public int getNo() {
         return no;
     }

@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class Board implements Serializable {
+public class Board implements Serializable, SequenceNo {
 
     private static int seqNo;
+
     private int no;
     private String title;
     private String content;
@@ -33,14 +34,13 @@ public class Board implements Serializable {
     }
 
     public static Board valueOf(String csv) {
-        String[] values = csv.split(","); // csv: "1,홍길동,hong@test.com,1111,010-1111-2222"
+        String[] values = csv.split(",");
         Board board = new Board();
         board.setNo(Integer.parseInt(values[0]));
         board.setTitle(values[1]);
         board.setContent(values[2]);
         board.setCreatedDate(new Date(Long.parseLong(values[3])));
         board.setViewCount(Integer.parseInt(values[4]));
-
         return board;
     }
 
@@ -50,7 +50,19 @@ public class Board implements Serializable {
                 .append(title).append(",")
                 .append(content).append(",")
                 .append(createdDate.getTime()).append(",")
-                .append(viewCount).toString();
+                .append(viewCount)
+                .toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "no=" + no +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdDate=" + createdDate +
+                ", viewCount=" + viewCount +
+                '}';
     }
 
     @Override
@@ -70,6 +82,7 @@ public class Board implements Serializable {
         return Objects.hashCode(no);
     }
 
+    @Override
     public int getNo() {
         return no;
     }
