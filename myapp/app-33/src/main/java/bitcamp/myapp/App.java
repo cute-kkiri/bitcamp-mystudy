@@ -12,11 +12,13 @@ import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.SequenceNo;
 import bitcamp.myapp.vo.User;
 import bitcamp.util.Prompt;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileOutputStream;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,19 +95,25 @@ public class App {
     }
 
     private void loadData() {
+//        loadJson(projectList, "project.json", Project.class);
+//        loadJson(boardList, "board.json", Board.class);
         try {
             XSSFWorkbook workbook = new XSSFWorkbook("data.xlsx");
-
             loadUsers(workbook);
             loadBoards(workbook);
             loadProjects(workbook);
 
             System.out.println("데이터를 로딩 했습니다.");
-
         } catch (Exception e) {
             System.out.println("데이터 로딩 중 오류 발생!");
             e.printStackTrace();
         }
+
+//        loadJson(userList, "user.json", User.class);
+//        loadJson(boardList, "board.json", Board.class);
+
+
+        // System.out.println("데이터를 로딩 했습니다.");
     }
 
     private void loadUsers(XSSFWorkbook workbook) {
@@ -113,15 +121,17 @@ public class App {
 
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
+
             try {
                 User user = new User();
+
                 user.setNo(Integer.parseInt(row.getCell(0).getStringCellValue()));
                 user.setName(row.getCell(1).getStringCellValue());
                 user.setEmail(row.getCell(2).getStringCellValue());
                 user.setPassword(row.getCell(3).getStringCellValue());
                 user.setTel(row.getCell(4).getStringCellValue());
-                userList.add(user);
 
+                userList.add(user);
             } catch (Exception e) {
                 System.out.printf("%s 번 회원의 데이터 형식이 맞지 않습니다.\n", row.getCell(0).getStringCellValue());
             }
@@ -143,6 +153,7 @@ public class App {
 
             try {
                 Board board = new Board();
+
                 board.setNo(Integer.parseInt(row.getCell(0).getStringCellValue()));
                 board.setTitle(row.getCell(1).getStringCellValue());
                 board.setContent(row.getCell(2).getStringCellValue());
@@ -174,11 +185,13 @@ public class App {
 
             try {
                 Project project = new Project();
+
                 project.setNo(Integer.parseInt(row.getCell(0).getStringCellValue()));
                 project.setTitle(row.getCell(1).getStringCellValue());
                 project.setDescription(row.getCell(2).getStringCellValue());
                 project.setStartDate(row.getCell(3).getStringCellValue());
                 project.setEndDate(row.getCell(4).getStringCellValue());
+//                project.setTel(row.getCell(4).getStringCellValue());
 
                 String[] members = row.getCell(5).getStringCellValue().split(",");
                 for (String memberNo : members) {
@@ -187,10 +200,10 @@ public class App {
                         project.getMembers().add(member);
                     }
                 }
-                projectList.add(project);
 
+                projectList.add(project);
             } catch (Exception e) {
-                System.out.printf("%s 번 프로젝트의 데이터 형식이 맞지 않습니다.\n", row.getCell(0).getStringCellValue());
+                System.out.printf("%s 번 프로젝트 데이터 형식이 맞지 않습니다.\n", row.getCell(0).getStringCellValue());
             }
         }
 
@@ -199,6 +212,7 @@ public class App {
         } catch (Exception e) {
             System.out.println("프로젝트 일련 번호 초기화 오류!");
         }
+
     }
 
     private User findUserByNo(int no) {
@@ -208,6 +222,38 @@ public class App {
             }
         }
         return null;
+    }
+
+    private <E> void loadJson(List<E> list, String filename, Class<E> elementType) {
+        try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
+
+            StringBuilder strBuilder = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) {
+                strBuilder.append(line);
+            }
+
+            list.addAll((List<E>) new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                    .create()
+                    .fromJson(
+                            strBuilder.toString(),
+                            TypeToken.getParameterized(List.class, elementType)));
+
+            // 읽어 들인 객체의 타입이 SequenceNo 구현체라면
+            // 일련 번호를 객체 식별 번호로 사용한다는 것이기 때문에
+            // 목록에 저장된 객체 중에서 가장 큰 일련 번호를 알아내서 클래스의 스태틱 필드에 설정해야 한다.
+            for (Class<?> type : elementType.getInterfaces()) {
+                if (type == SequenceNo.class) {
+                    initSeqNo(list, elementType);
+                    break;
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.printf("%s 파일 로딩 중 오류 발생!\n", filename);
+            // e.printStackTrace();
+        }
     }
 
     private <E> void initSeqNo(List<E> list, Class<E> elementType) throws Exception {
@@ -236,8 +282,8 @@ public class App {
             try (FileOutputStream out = new FileOutputStream("data.xlsx")) {
                 workbook.write(out);
             }
-            System.out.println("데이터를 저장 했습니다.");
 
+            System.out.println("데이터를 저장 했습니다.");
         } catch (Exception e) {
             System.out.println("데이터 저장 중 오류 발생!");
             e.printStackTrace();
@@ -270,7 +316,7 @@ public class App {
         XSSFSheet sheet = workbook.createSheet("boards");
 
         // 셀 이름 출력
-        String[] cellHeaders = {"no", "title", "content", "created_date", "view_count"};
+        String[] cellHeaders = {"no", "title", "content", "create_date", "view_count"};
         Row headerRow = sheet.createRow(0);
         for (int i = 0; i < cellHeaders.length; i++) {
             headerRow.createCell(i).setCellValue(cellHeaders[i]);
@@ -311,14 +357,28 @@ public class App {
             dataRow.createCell(3).setCellValue(project.getStartDate());
             dataRow.createCell(4).setCellValue(project.getEndDate());
 
-            StringBuilder strBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             for (User member : project.getMembers()) {
-                if (strBuilder.length() > 0) {
-                    strBuilder.append(",");
+                if (stringBuilder.length() > 0) {
+                    stringBuilder.append(",");
                 }
-                strBuilder.append(member.getNo());
+                stringBuilder.append(member.getNo());
             }
-            dataRow.createCell(5).setCellValue(strBuilder.toString());
+            dataRow.createCell(5).setCellValue(stringBuilder.toString());
+        }
+    }
+
+    private void saveJson(Object obj, String filename) {
+        try (FileWriter out = new FileWriter(filename)) {
+
+            out.write(new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                    .create()
+                    .toJson(obj));
+
+        } catch (IOException e) {
+            System.out.printf("%s 파일 저장 중 오류 발생!\n", filename);
+            e.printStackTrace();
         }
     }
 
