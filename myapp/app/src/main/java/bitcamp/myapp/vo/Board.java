@@ -1,104 +1,93 @@
 package bitcamp.myapp.vo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 public class Board implements Serializable, SequenceNo {
 
-  private static int seqNo;
+    @Serial
+    private static final long serialVersionUID = 1l;
 
-  private int no;
-  private String title;
-  private String content;
-  private Date createdDate;
-  private int viewCount;
+    private int no;
+    private String title;
+    private String content;
+    private Date createdDate;
+    private int viewCount;
 
-  public Board() {
-  }
-
-  public Board(int no) {
-    this.no = no;
-  }
-
-  public static int getNextSeqNo() {
-    return ++seqNo;
-  }
-
-  public static void initSeqNo(int no) {
-    seqNo = no;
-  }
-
-  public static int getSeqNo() {
-    return seqNo;
-  }
-
-  @Override
-  public String toString() {
-    return "Board{" +
-        "no=" + no +
-        ", title='" + title + '\'' +
-        ", content='" + content + '\'' +
-        ", createdDate=" + createdDate +
-        ", viewCount=" + viewCount +
-        '}';
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    public Board() {
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public Board(int no) {
+        this.no = no;
     }
-    Board board = (Board) o;
-    return no == board.no;
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(no);
-  }
+    @Override
+    public String toString() {
+        return "Board{" +
+                "no=" + no +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdDate=" + createdDate +
+                ", viewCount=" + viewCount +
+                '}';
+    }
 
-  @Override
-  public int getNo() {
-    return no;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Board board = (Board) o;
+        return no == board.no;
+    }
 
-  public void setNo(int no) {
-    this.no = no;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(no);
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public int getNo() {
+        return no;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setNo(int no) {
+        this.no = no;
+    }
 
-  public String getContent() {
-    return content;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public Date getCreatedDate() {
-    return createdDate;
-  }
+    public String getContent() {
+        return content;
+    }
 
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
-  }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-  public int getViewCount() {
-    return viewCount;
-  }
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 
-  public void setViewCount(int viewCount) {
-    this.viewCount = viewCount;
-  }
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
 }
