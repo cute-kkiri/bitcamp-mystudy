@@ -20,7 +20,7 @@ public class Score implements Serializable {
   //
   // 그럼 sum과 aver는 어떻게 처리해야 하는가?
   // => serialize 데이터를 읽는 쪽에서 데이터를 다 읽은 후 계산을 수행해서 값을 처리해야 한다.
-  // 그래야만 데이터 왜곡을 막을 수 있다.
+  //    그래야만 데이터 왜곡을 막을 수 있다.
   //
   // 데이터 왜곡?
   // - kor, eng, math 에 저장된 값과 sum과 aver에 저장된 값이 일치하지 않는 경우를 말한다.
