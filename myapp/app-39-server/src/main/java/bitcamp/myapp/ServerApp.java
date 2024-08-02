@@ -26,10 +26,8 @@ public class ServerApp {
 
     public static void main(String[] args) {
         ServerApp app = new ServerApp();
-
         // 애플리케이션이 시작되거나 종료될 때 알림 받을 객체의 연락처를 등록한다.
         app.addApplicationListener(new InitApplicationListener());
-
         app.execute();
     }
 
@@ -52,7 +50,6 @@ public class ServerApp {
             }
         }
 
-        // 리스너에서 먼저 생성 후 호출해야함.
         // 클라이언트의 데이터 처리 요청을 수행할 Dao Skeloton 객체를 준비한다.
         userDaoSkel = (UserDaoSkel) appCtx.getAttribute("userDaoSkel");
         boardDaoSkel = (BoardDaoSkel) appCtx.getAttribute("boardDaoSkel");
@@ -63,18 +60,26 @@ public class ServerApp {
         try (ServerSocket serverSocket = new ServerSocket(8888);) {
             System.out.println("서버 실행 중...");
 
-            // Muti-threading
-            // 별도의 실행흐름으로 실행하기.
             while (true) {
                 Socket socket = serverSocket.accept();
-                new Thread() {
+                // 1) 스레드의 서브 클래스를 만들어 실행시키기
+                //        new Thread() {
+                //
+                //          @Override
+                //          public void run() {
+                //            processRequest(socket);
+                //          }
+                //        }.start();
 
-                    @Override
-                    public void run() {
-                        processRequest(socket);
-                    }
-                }.start();
-                // new RequestThread().start();
+                // 2) Runnable 구현체를 만들어 실행시키기
+//                new Thread(new Runnable() {
+//                    public void run() {
+//                        processRequest(socket);
+//                    }
+//                }).start();
+
+                // 3) Lambda 문법으로 압축하기
+                new Thread(() -> processRequest(socket)).start();
             }
 
         } catch (Exception e) {
