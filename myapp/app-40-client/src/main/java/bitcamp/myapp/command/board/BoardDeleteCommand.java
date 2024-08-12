@@ -5,11 +5,11 @@ import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.util.Prompt;
 
-public class BoardUpdateCommand implements Command {
+public class BoardDeleteCommand implements Command {
 
   private BoardDao boardDao;
 
-  public BoardUpdateCommand(BoardDao boardDao) {
+  public BoardDeleteCommand(BoardDao boardDao) {
     this.boardDao = boardDao;
   }
 
@@ -19,20 +19,19 @@ public class BoardUpdateCommand implements Command {
     int boardNo = Prompt.inputInt("게시글 번호?");
 
     try {
-      Board board = boardDao.findBy(boardNo);
-      if (board == null) {
+      Board deletedBoard = boardDao.findBy(boardNo);
+      if (deletedBoard == null) {
         System.out.println("없는 게시글입니다.");
         return;
       }
-      
-      board.setTitle(Prompt.input("제목(%s)?", board.getTitle()));
-      board.setContent(Prompt.input("내용(%s)?", board.getContent()));
 
-      boardDao.update(board);
-      System.out.println("변경 했습니다.");
+      boardDao.delete(boardNo);
+      System.out.printf("'%s'번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
 
     } catch (Exception e) {
-      System.out.println("변경 중 오류 발생!");
+      System.out.println("삭제 중 오류 발생!");
     }
   }
+
+
 }

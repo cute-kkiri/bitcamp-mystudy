@@ -30,8 +30,8 @@ public class ProjectUpdateCommand implements Command {
 
       project.setTitle(Prompt.input("프로젝트명(%s)?", project.getTitle()));
       project.setDescription(Prompt.input("설명(%s)?", project.getDescription()));
-      project.setStartDate(Prompt.input("시작일(%s)?", project.getStartDate()));
-      project.setEndDate(Prompt.input("종료일(%s)?", project.getEndDate()));
+      project.setStartDate(Prompt.inputDate("시작일(%s)?(예: 2024-01-24)", project.getStartDate()));
+      project.setEndDate(Prompt.inputDate("종료일(%s)?(예: 2024-02-15)", project.getEndDate()));
 
       System.out.println("팀원:");
       memberHandler.deleteMembers(project);

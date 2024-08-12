@@ -24,13 +24,8 @@
 - DAO 구현체 생성 및 적용
   - UserDaoImpl 클래스 정의
   - BoardDaoImpl 클래스 정의
-    - findBy()에서 날짜를 꺼낼 때 getTimestamp()를 사용
   - ProjectDaoImpl 클래스 정의
-    - ProjectDao 인터페이스 변경
-  - InitApplicationListener 변경
-- 도메인 클래스 변경
-  - Project 클래스 변경
-    - 시작일, 종료일 타입을 String에서 java.sql.Date 으로 변경 
 
 ## 소스 파일
 
+- ServerApp.java 
