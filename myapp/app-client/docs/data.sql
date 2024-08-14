@@ -22,7 +22,14 @@ insert into myapp_boards(board_id, title, content) values
   (7, '제목7', '내용');
 
 -- 프로젝트 데이터
-insert into myapp_projects(project_id, title, description, start_date, end_date, members) values
-  (101, '프로젝트1', '설명', '2024-1-1', '2024-2-15', '1,2,5'),
-  (102, '프로젝트2', '설명', '2024-2-1', '2024-3-15', '5,6,9'),
-  (103, '프로젝트3', '설명', '2024-3-1', '2024-4-15', '4,7,9');
+insert into myapp_projects(project_id, title, description, start_date, end_date) values
+  (101, '프로젝트1', '설명', '2024-1-1', '2024-2-15'),
+  (102, '프로젝트2', '설명', '2024-2-1', '2024-3-15'),
+  (103, '프로젝트3', '설명', '2024-3-1', '2024-4-15');
+
+
+-- 프로젝트 멤버
+insert into myapp_project_members(project_id, user_id) values
+    (101, 1), (101, 2), (101, 5),
+    (102, 5), (102, 6), (102, 9),
+    (103, 4), (103, 7), (103, 9);
