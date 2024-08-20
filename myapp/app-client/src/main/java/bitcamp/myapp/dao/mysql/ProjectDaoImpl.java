@@ -1,171 +1,108 @@
 package bitcamp.myapp.dao.mysql;
 
+import bitcamp.bitbatis.SqlSession;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectDaoImpl implements ProjectDao {
 
-    private Connection con;
+  private SqlSession sqlSession;
 
-    public ProjectDaoImpl(Connection con) {
-        this.con = con;
+  public ProjectDaoImpl(SqlSession sqlSession) {
+    this.sqlSession = sqlSession;
+  }
+
+  @Override
+  public boolean insert(Project project) throws Exception {
+    int keyNo = sqlSession.insertReturningKey(
+        "insert into myapp_projects(title,description,start_date,end_date) values (?, ?, ?, ?)",
+        project.getTitle(),
+        project.getDescription(),
+        project.getStartDate(),
+        project.getEndDate());
+    project.setNo(keyNo);
+    return true;
+  }
+
+  @Override
+  public List<Project> list() throws Exception {
+    return sqlSession.selectList(
+        "select"
+            + " project_id as no,"
+            + " title,"
+            + " start_date as startDate,"
+            + " end_date as endDate"
+            + " from myapp_projects order by project_id asc",
+        Project.class);
+  }
+
+  @Override
+  public Project findBy(int no) throws Exception {
+    return sqlSession.selectOne(
+        "select"
+            + " project_id as no,"
+            + " title,"
+            + " description,"
+            + " start_date as startDate,"
+            + " end_date as endDate"
+            + " from myapp_projects where project_id=?",
+        Project.class,
+        no);
+  }
+
+  @Override
+  public boolean update(Project project) throws Exception {
+    int count = sqlSession.update(
+        "update myapp_projects set"
+            + " title=?, description=?, start_date=?, end_date=?"
+            + " where project_id=?",
+        project.getTitle(),
+        project.getDescription(),
+        project.getStartDate(),
+        project.getEndDate(),
+        project.getNo());
+    return count > 0;
+  }
+
+  @Override
+  public boolean delete(int no) throws Exception {
+    int count = sqlSession.delete(
+        "delete from myapp_projects where project_id=?",
+        no);
+    return count > 0;
+  }
+
+  @Override
+  public boolean insertMembers(int projectNo, List<User> members) throws Exception {
+    for (User user : members) {
+      sqlSession.insert(
+          "insert into myapp_project_members(project_id, user_id) values (?, ?)",
+          projectNo,
+          user.getNo());
     }
+    return true;
+  }
 
-    @Override
-    public boolean insert(Project project) throws Exception {
-        try (Statement stmt = con.createStatement()) {
+  @Override
+  public List<User> getMembers(int projectNo) throws Exception {
+    return sqlSession.selectList(
+        "select "
+            + " pm.user_id as no,"
+            + " u.name"
+            + " from myapp_project_members pm"
+            + "  inner join myapp_users u on pm.user_id=u.user_id"
+            + " where pm.project_id=?",
+        User.class,
+        projectNo);
+  }
 
-            stmt.executeUpdate(String.format(
-                            "insert into myapp_projects(title,description,start_date,end_date)"
-                                    + " values ('%s','%s','%s','%s')",
-                            project.getTitle(),
-                            project.getDescription(),
-                            project.getStartDate(),
-                            project.getEndDate()),
-                    Statement.RETURN_GENERATED_KEYS // insert 실행 후 자동 생성된 PK 값을 가져오는 옵션
-            );
-
-            // PK 컬럼 값 가져올 때 사용할 ResultSet 객체를 준비
-            ResultSet keyRS = stmt.getGeneratedKeys();
-
-            // ResultSet 객체를 통해 서버에서 PK 값을 가져온다.
-            // => Project를 한 개 insert 했기 때문에 생성된 PK 값도 한 개다.
-            // => 따라서 가져올 PK 값도 한 개다.
-            keyRS.next();
-
-            // PK 컬럼이 한 개이기 때문에 1 번째 컬럼 값을 꺼낸다.
-            // PK 컬럼을 가져올 때는 컬럼 이름으로 꺼내는 것이 아니라 순번으로 꺼낸다.
-            // 컬럼 인덱스는 1번부터 시작한다.
-            int projectNo = keyRS.getInt(1);
-
-            // 호출할 쪽에서 project PK 값을 사용할 수 있도록 Project 객체에 담아 둔다.
-            project.setNo(projectNo);
-
-            return true;
-        }
-    }
-
-    @Override
-    public List<Project> list() throws Exception {
-        try (Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from myapp_projects order by project_id asc")) {
-            ArrayList<Project> list = new ArrayList<>();
-            while (rs.next()) {
-                Project project = new Project();
-                project.setNo(rs.getInt("project_id"));
-                project.setTitle(rs.getString("title"));
-                project.setStartDate(rs.getDate("start_date"));
-                project.setEndDate(rs.getDate("end_date"));
-                list.add(project);
-            }
-            return list;
-        }
-    }
-
-    @Override
-    public Project findBy(int no) throws Exception {
-        try (Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from myapp_projects where project_id=" + no)) {
-            if (rs.next()) {
-                Project project = new Project();
-                project.setNo(rs.getInt("project_id"));
-                project.setTitle(rs.getString("title"));
-                project.setDescription(rs.getString("description"));
-                project.setStartDate(rs.getDate("start_date"));
-                project.setEndDate(rs.getDate("end_date"));
-
-                // 이렇게 하면 project 정보를 가져올 때마다 member 정보를 가져온다.
-                // => 필요에 따라 viewCommand에서 할지 여기서 할지 정한다.
-                // project.getMembers().addAll(getMembers(no));
-                // 따로 관리하기 위해서 getMembers를 만들었으니까 그냥 따로 하자.
-
-                return project;
-            }
-            return null;
-        }
-    }
-
-    @Override
-    public boolean update(Project project) throws Exception {
-        try (Statement stmt = con.createStatement()) {
-
-            int count = stmt.executeUpdate(String.format(
-                    "update myapp_projects set"
-                            + " title='%s',"
-                            + " description='%s',"
-                            + " start_date='%s',"
-                            + " end_date='%s'"
-                            + " where project_id=%d",
-                    project.getTitle(),
-                    project.getDescription(),
-                    project.getStartDate(),
-                    project.getEndDate(),
-                    project.getNo()));
-            
-            return count > 0;
-        }
-    }
-
-    @Override
-    public boolean delete(int no) throws Exception {
-        try (Statement stmt = con.createStatement()) {
-            int count = stmt.executeUpdate(
-                    String.format("delete from myapp_projects where project_id=%d", no));
-
-            return count > 0;
-        }
-    }
-
-    @Override
-    public boolean insertMembers(int projectNo, List<User> members) throws Exception {
-        try (Statement stmt = con.createStatement()) {
-
-            for (User user : members) {
-                stmt.executeUpdate(String.format(
-                        "insert into myapp_project_members(project_id, user_id)"
-                                + " values (%d, %d)",
-                        projectNo,
-                        user.getNo()
-                ));
-            }
-            return true;
-        }
-    }
-
-    @Override
-    public List<User> getMembers(int projectNo) throws Exception {
-        try (Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(
-                     "select "
-                             + " u.user_id,"
-                             + " u.name"
-                             + " from myapp_project_members pm"
-                             + " inner join myapp_users u on pm.user_id=u.user_id"
-                             + " where pm.project_id=" + projectNo)) {
-            ArrayList<User> list = new ArrayList<>();
-            while (rs.next()) {
-                User user = new User();
-                user.setNo(rs.getInt("user_id"));
-                user.setName(rs.getString("name"));
-                list.add(user);
-            }
-            return list;
-        }
-    }
-
-    @Override
-    public boolean deleteMembers(int projectNo) throws Exception {
-        try (Statement stmt = con.createStatement()) {
-            int count = stmt.executeUpdate(
-                    String.format("delete from myapp_project_members where project_id=%d", projectNo));
-            return count > 0;
-        }
-    }
+  @Override
+  public boolean deleteMembers(int projectNo) throws Exception {
+    int count = sqlSession.delete(
+        "delete from myapp_project_members where project_id=?",
+        projectNo);
+    return count > 0;
+  }
 }

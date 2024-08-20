@@ -2,99 +2,54 @@ package bitcamp.myapp.dao.mysql;
 
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
+import org.apache.ibatis.session.SqlSession;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BoardDaoImpl implements BoardDao {
 
-  private Connection con;
+    private SqlSession sqlSession;
 
-  public BoardDaoImpl(Connection con) {
-    this.con = con;
-  }
-
-  @Override
-  public boolean insert(Board board) throws Exception {
-    try (Statement stmt = con.createStatement()) {
-      stmt.executeUpdate(String.format(
-          "insert into myapp_boards(title, content)"
-              + " values ('%s', '%s')",
-          board.getTitle(),
-          board.getContent()));
-      return true;
+    public BoardDaoImpl(SqlSession sqlSession) {
+        this.sqlSession = sqlSession;
     }
-  }
 
-  @Override
-  public List<Board> list() throws Exception {
-    try (Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from myapp_boards order by board_id asc")) {
-      ArrayList<Board> list = new ArrayList<>();
-      while (rs.next()) {
-        Board board = new Board();
-        board.setNo(rs.getInt("board_id"));
-        board.setTitle(rs.getString("title"));
-        board.setCreatedDate(rs.getDate("created_date"));
-        board.setViewCount(rs.getInt("view_count"));
-        list.add(board);
-      }
-      return list;
+    @Override
+    public boolean insert(Board board) throws Exception {
+        int count = sqlSession.insert("BoardDao.insert", board);
+        return count > 0;
     }
-  }
 
-  @Override
-  public Board findBy(int no) throws Exception {
-    try (Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from myapp_boards where board_id=" + no)) {
-      if (rs.next()) {
-        Board board = new Board();
-        board.setNo(rs.getInt("board_id"));
-        board.setTitle(rs.getString("title"));
-        board.setContent(rs.getString("content"));
-        board.setCreatedDate(rs.getTimestamp("created_date"));
-        board.setViewCount(rs.getInt("view_count"));
-        return board;
-      }
-      return null;
+    @Override
+    public List<Board> list() throws Exception {
+        return sqlSession.selectList("BoardDao.list");
     }
-  }
 
-  @Override
-  public boolean update(Board board) throws Exception {
-    try (Statement stmt = con.createStatement()) {
-      int count = stmt.executeUpdate(String.format(
-          "update myapp_boards set"
-              + " title='%s',"
-              + " content='%s'"
-              + " where board_id=%d",
-          board.getTitle(),
-          board.getContent(),
-          board.getNo()));
-      return count > 0;
+    @Override
+    public Board findBy(int no) throws Exception {
+        return sqlSession.selectOne("BoardDao.findBy", no);
     }
-  }
 
-  @Override
-  public boolean delete(int no) throws Exception {
-    try (Statement stmt = con.createStatement()) {
-      int count = stmt.executeUpdate(
-          String.format("delete from myapp_boards where board_id=%d", no));
-      return count > 0;
+    @Override
+    public boolean update(Board board) throws Exception {
+        int count = sqlSession.update("BoardDao.update", board);
+        return count > 0;
     }
-  }
 
-  @Override
-  public void updateViewCount(int boardNo, int count) throws Exception {
-    try (Statement stmt = con.createStatement()) {
-      stmt.executeUpdate(String.format(
-          "update myapp_boards set"
-              + " view_count=%d"
-              + " where board_id=%d",
-          count,
-          boardNo));
+    @Override
+    public boolean delete(int no) throws Exception {
+        int count = sqlSession.delete("BoardDao.delete", no);
+        return count > 0;
     }
-  }
+
+    @Override
+    public void updateViewCount(int boardNo, int count) throws Exception {
+        Map<String, Object> values = new HashMap<>();
+        values.put("no", boardNo);
+        values.put("count", count);
+
+        sqlSession.update("BoardDao.updateViewCount", values);
+    }
 }

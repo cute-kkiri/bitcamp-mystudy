@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserDao">
+    <!-- User.class와 같은 형태를 resultType에 패키지명으로 적어준다. -->
+    <select id="list" resultType="bitcamp.myapp.vo.User">
+        select
+            user_id as no,
+            name,
+            email
+        from
+            myapp_users
+        order by
+            user_id asc
+    </select>
+
+    <insert id="insert" parameterType="bitcamp.myapp.vo.User">
+        insert into myapp_users(name, email, pwd, tel)
+<!--        values (?, ?, sha1(?), ?) -->
+        <!-- getter 메소드를 property라고 한다. -->
+        <!-- getter를 가리키는 이름 property name -->
+        values (#{name}, #{email}, sha1(#{password}), #{tel})
+    </insert>
+
+    <select id="findBy" resultType="bitcamp.myapp.vo.User" parameterType="int">
+        select
+            user_id as no,
+            name,
+            email,
+            tel
+        from
+            myapp_users
+        where
+            <!-- 여기에 넣어줘야할 no값의 이름은 마음대로 지정해줘도 된다. -->
+            user_id=#{ok}
+    </select>
+
+    <select id="findByEmailAndPassword" resultType="bitcamp.myapp.vo.User" parameterType="map">
+        select
+            user_id as no,
+            name,
+            email,
+            tel
+        from
+            myapp_users
+        where
+            <!-- Map으로 넘긴 이름으로 줌. -->
+            email=#{email} and pwd=sha1(#{password})
+    </select>
+
+    <update id="update" parameterType="bitcamp.myapp.vo.User">
+        update
+            myapp_users
+        set
+            name=#{name},
+            email=#{email},
+            pwd=sha1(#{password}),
+            tel=#{tel}
+        where
+            user_id=#{no}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from
+            myapp_users
+        where
+            user_id=#{ok}
+    </delete>
+</mapper>
