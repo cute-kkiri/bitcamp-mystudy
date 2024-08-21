@@ -1,12 +1,12 @@
-# 44. JDBC 코드를 캡슐화하기
+# 45. Mybatis 퍼시스턴스 프레임워크 사용하기
 
 ## 학습목표
 
-- Reflection API를 사용할 수 있다.
+- Mybatis를 사용하여 DBMS와 연동할 수 있다.
 
 ## 요구사항
 
-- 반복적인 패턴의 JDBC 코드를 캡슐화하여 DB 프로그래밍을 간결하라 만들라.
+- DAO에 Mybatis를 적용하라.
 
 ## 실행 결과
 
@@ -14,10 +14,10 @@
 
 ## 작업
 
-- JDBC 코드를 캡슐화 하기
-  - SqlSession 클래스 정의 
-- BoardDaoImpl, UserDaoImpl, ProjectDaoImpl 클래스 변경
-- InitApplicationListener 클래스 변경
+- Mybatis 라이브러리를 프로젝트에 추가
+  - build.gradle(Gradle 빌드 스크립트 파일) 변경
+- 
+
 
 ## 소스 파일
 

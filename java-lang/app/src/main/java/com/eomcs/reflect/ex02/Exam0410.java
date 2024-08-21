@@ -16,7 +16,7 @@ public class Exam0410 {
   }
 
   public static void main(String[] args) throws Exception {
-    Class<?> clazz = Class.forName("com.eomcs.reflect.ex02.Exam05$D");
+    Class<?> clazz = Class.forName("com.eomcs.reflect.ex02.Exam0410$D");
 
     // 해당 클래스가 구현한 인터페이스 정보를 가져온다.
     Class<?>[] list = clazz.getInterfaces();
