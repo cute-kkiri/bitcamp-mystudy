@@ -19,22 +19,18 @@ public class UserViewCommand implements Command {
             prompt.printf("[%s]\n", menuName);
             int userNo = prompt.inputInt("회원번호?");
 
-            try {
-                User user = userDao.findBy(userNo);
-                if (user == null) {
-                    prompt.println("없는 회원입니다.");
-                    return;
-                }
-
-                prompt.printf("이름: %s\n", user.getName());
-                prompt.printf("이메일: %s\n", user.getEmail());
-                prompt.printf("연락처: %s\n", user.getTel());
-
-            } catch (Exception e) {
-                prompt.println("조회 중 오류 발생!");
+            User user = userDao.findBy(userNo);
+            if (user == null) {
+                prompt.println("없는 회원입니다.");
+                return;
             }
-        } catch (Exception e) {
 
+            prompt.printf("이름: %s\n", user.getName());
+            prompt.printf("이메일: %s\n", user.getEmail());
+            prompt.printf("연락처: %s\n", user.getTel());
+
+        } catch (Exception e) {
+            prompt.println("조회 중 오류 발생!");
         }
     }
 }
