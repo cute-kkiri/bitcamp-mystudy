@@ -8,7 +8,6 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/user/add")
 public class UserAddServlet extends GenericServlet {
@@ -25,14 +24,7 @@ public class UserAddServlet extends GenericServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        res.setContentType("text/html;charset=UTF-8");
-
-        PrintWriter out = res.getWriter();
-
-        req.getRequestDispatcher("/header").include(req, res);
-
         try {
-            out.println("<h1>회원 등록 결과</h1>");
             User user = new User();
             user.setName(req.getParameter("name"));
             user.setEmail(req.getParameter("email"));
@@ -41,16 +33,14 @@ public class UserAddServlet extends GenericServlet {
 
             userDao.insert(user);
             sqlSessionFactory.openSession(false).commit();
-            out.println("<p>등록 성공입니다.</p>");
+            ((HttpServletResponse) res).sendRedirect("/user/list");
 
         } catch (Exception e) {
             sqlSessionFactory.openSession(false).rollback();
-            out.println("<p>등록 중 오류 발생!</p>");
+            req.setAttribute("exception", e);
+            req.getRequestDispatcher("/error.jsp").forward(req, res);
         }
 
-        out.println("</body>");
-        out.println("</html>");
 
-        ((HttpServletResponse) res).setHeader("Refresh", "1;url=/user/list");
     }
 }

@@ -10,7 +10,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/user/delete")
 public class UserDeleteServlet extends GenericServlet {
@@ -26,32 +25,20 @@ public class UserDeleteServlet extends GenericServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-
-        res.setContentType("text/html;charset=UTF-8");
-
-        PrintWriter out = res.getWriter();
-
-        req.getRequestDispatcher("/header").include(req, res);
         try {
-            out.println("<h1>회원 삭제 결과</h1>");
-
             int userNo = Integer.parseInt(req.getParameter("no"));
 
             if (userDao.delete(userNo)) {
                 sqlSessionFactory.openSession(false).commit();
-                out.println("<p>삭제 했습니다.</p>");
+                ((HttpServletResponse) res).sendRedirect("/user/list");
             } else {
-                out.println("<p>없는 회원입니다.</p>");
+                throw new Exception("없는 회원입니다.");
             }
 
         } catch (Exception e) {
             sqlSessionFactory.openSession(false).rollback();
-            out.println("<p>삭제 중 오류 발생!</p>");
+            req.setAttribute("exception", e);
+            req.getRequestDispatcher("/error.jsp").forward(req, res);
         }
-
-        out.println("</body>");
-        out.println("</html>");
-
-        ((HttpServletResponse) res).setHeader("Refresh", "1;url=/user/list");
     }
 }

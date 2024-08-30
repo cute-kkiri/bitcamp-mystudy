@@ -10,7 +10,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/project/delete")
 public class ProjectDeleteServlet extends GenericServlet {
@@ -26,34 +25,22 @@ public class ProjectDeleteServlet extends GenericServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-
-        res.setContentType("text/html;charset=UTF-8");
-
-        PrintWriter out = res.getWriter();
-
-        req.getRequestDispatcher("/header").include(req, res);
-
         try {
-            out.println("<h1>프로젝트 삭제 결과</h1>");
-
             int projectNo = Integer.parseInt(req.getParameter("no"));
 
             projectDao.deleteMembers(projectNo);
             if (projectDao.delete(projectNo)) {
                 sqlSessionFactory.openSession(false).commit();
-                out.println("<p>삭제 했습니다.</p>");
+                ((HttpServletResponse) res).sendRedirect("/project/list");
             } else {
-                out.println("<p>없는 프로젝트입니다.</p>");
+                throw new Exception("없는 프로젝트입니다!");
             }
 
         } catch (Exception e) {
             sqlSessionFactory.openSession(false).rollback();
-            out.println("<p>삭제 중 오류 발생!</p>");
+            req.setAttribute("exception", e);
+            req.getRequestDispatcher("/error.jsp").forward(req, res);
         }
 
-        out.println("</body>");
-        out.println("</html>");
-
-        ((HttpServletResponse) res).setHeader("Refresh", "1;url=/project/list");
     }
 }

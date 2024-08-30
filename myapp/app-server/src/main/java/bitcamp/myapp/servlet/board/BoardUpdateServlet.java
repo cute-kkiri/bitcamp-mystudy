@@ -13,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/board/update")
 public class BoardUpdateServlet extends GenericServlet {
@@ -23,60 +22,35 @@ public class BoardUpdateServlet extends GenericServlet {
 
     @Override
     public void init() throws ServletException {
-
-        boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
-        sqlSessionFactory = (SqlSessionFactory) this.getServletContext().getAttribute("sqlSessionFactory");
+        this.boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+        this.sqlSessionFactory = (SqlSessionFactory) this.getServletContext().getAttribute("sqlSessionFactory");
     }
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-
-        res.setContentType("text/html;charset=UTF-8");
-
-        PrintWriter out = res.getWriter();
-
-        req.getRequestDispatcher("/header").include(req, res);
-
         try {
-            out.println("<h1>게시글 변경 결과</h1>");
-
             User loginUser = (User) ((HttpServletRequest) req).getSession().getAttribute("loginUser");
 
             int boardNo = Integer.parseInt(req.getParameter("no"));
             Board board = boardDao.findBy(boardNo);
 
             if (board == null) {
-                out.println("<p>없는 게시글입니다.</p>");
-                out.println("</body>");
-                out.println("</html>");
-
-                ((HttpServletResponse) res).setHeader("Refresh", "1;url=/board/list");
-                return;
+                throw new Exception("없는 게시글입니다!");
             } else if (loginUser == null || loginUser.getNo() > 10 && board.getWriter().getNo() != loginUser.getNo()) {
-                out.println("<p>변경 권한이 없습니다.</p>");
-                out.println("</body>");
-                out.println("</html>");
-
-                ((HttpServletResponse) res).setHeader("Refresh", "1;url=/board/list");
-                return;
+                throw new Exception("변경 권한이 없습니다!");
             }
 
             board.setTitle(req.getParameter("title"));
             board.setContent(req.getParameter("content"));
-
             boardDao.update(board);
             sqlSessionFactory.openSession(false).commit();
-            out.println("<p>변경 했습니다.</p>");
 
+            ((HttpServletResponse) res).sendRedirect("/board/list");
         } catch (Exception e) {
             sqlSessionFactory.openSession(false).rollback();
-            out.println("<p>변경 중 오류 발생!</p>");
-            e.printStackTrace();
+            req.setAttribute("exception", e);
+            req.getRequestDispatcher("/error.jsp").forward(req, res);
         }
 
-        out.println("</body>");
-        out.println("</html>");
-
-        ((HttpServletResponse) res).setHeader("Refresh", "1;url=/board/list");
     }
 }
