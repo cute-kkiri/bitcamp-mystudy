@@ -13,25 +13,25 @@ import javax.servlet.http.HttpServletResponse;
 
 // 서블릿 클래스를 만든 후, 서블릿 컨테이너에 등록해야만 사용할 수 있다.
 // 등록 방법 1)
-// 웹 애플리케이션 배치 파일(web.xml; DD(Deployment Descriptor) 파일)에 서블릿 정보를 등록한다.
-// => WEB-INF/web.xml
-// => DD File: Deployment Descriptor File
-// => 배치 예:
-// <servlet>
-// <servlet-name>서블릿별명</servlet-name>
-// <servlet-class>서블릿 클래스의 전체이름(패키지명 포함)</servlet-class>
-// </servlet>
+//   웹 애플리케이션 배치 파일(web.xml; DD(Deployment Descriptor) 파일)에 서블릿 정보를 등록한다.
+//   => WEB-INF/web.xml
+//   => DD File: Deployment Descriptor File
+//   => 배치 예:
+//      <servlet>
+//          <servlet-name>서블릿별명</servlet-name>
+//          <servlet-class>서블릿 클래스의 전체이름(패키지명 포함)</servlet-class>
+//      </servlet>
 //
-// <servlet-mapping>
-// <servlet-name>서블릿별명</servlet-name>
-// <url-pattern>클라이언트에서 요청할 때 사용할 URL(/로 시작해야 한다.)</url-pattern>
-// </servlet-mapping>
+//      <servlet-mapping>
+//          <servlet-name>서블릿별명</servlet-name>
+//          <url-pattern>클라이언트에서 요청할 때 사용할 URL(/로 시작해야 한다.)</url-pattern>
+//      </servlet-mapping>
 // 등록 방법 2)
-// 서블릿 클래스 선언부에 @WebServlet 애노테이션을 붙인다.
-// => @WebServlet
-// @WebServlet(URL)
-// @WebServlet(value=URL)
-// @WebServlet(urlPatterns={"URL1", "URL2", ...})
+//   서블릿 클래스 선언부에 @WebServlet 애노테이션을 붙인다.
+//   => @WebServlet
+//      @WebServlet(URL)
+//      @WebServlet(value=URL)
+//      @WebServlet(urlPatterns={"URL1", "URL2", ...})
 //
 // 서블릿 실행 방법
 // => http://서버주소:포트번호/웹애플리케이션이름/서블릿URL
@@ -59,11 +59,11 @@ import javax.servlet.http.HttpServletResponse;
 //
 // 주의!
 // => 서블릿 인스턴스는 오직 클래스 마다 한 개만 생성된다.
-// 그래서 모든 클라이언트가 같은 서블릿 인스턴스를 사용한다.
+//    그래서 모든 클라이언트가 같은 서블릿 인스턴스를 사용한다.
 // => 클라이언트마다 구분되어야 할 데이터는
-// 서블릿 인스턴스 변수에 보관해서는 안된다.
+//    서블릿 인스턴스 변수에 보관해서는 안된다.
 // => 왜?
-// 인스턴스는 모든 클라이언트가 공유하기 때문이다.
+//    인스턴스는 모든 클라이언트가 공유하기 때문이다.
 //
 
 @WebServlet("/ex01/first")
@@ -89,8 +89,8 @@ public class Servlet01 implements Servlet {
   @Override
   public void service(ServletRequest req, ServletResponse res)
       throws ServletException, IOException {
-    HttpServletRequest req2 = (HttpServletRequest) req;
-    HttpServletResponse res2 = (HttpServletResponse) res;
+    HttpServletRequest req2 = (HttpServletRequest)req;
+    HttpServletResponse res2 = (HttpServletResponse)res;
     // 클라이언트가 이 서블릿의 실행을 요청할 때마다 호출된다.
     // 클라이언트가 요청한 작업을 수행한다.
     System.out.println("Servlet01.service(ServletRequest,ServletResponse)");

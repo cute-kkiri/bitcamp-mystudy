@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 // 모든 서블릿에서 사용할 값을 설정하려면 컨텍스트 파라미터로 설정해야 한다.
 // => web.xml 에 지정하였다.
 //
-//@WebServlet(value="/ex06/s5", loadOnStartup=1)
+// @WebServlet(value = "/ex06/s5", loadOnStartup = 1)
 @SuppressWarnings("serial")
 public class Servlet05 extends HttpServlet {
 

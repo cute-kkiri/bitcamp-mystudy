@@ -22,23 +22,23 @@ public class Servlet03 extends HttpServlet {
     //
     // 리다이렉트
     // => 클라이언트의 요청을 받은 후 콘텐트를 보내는 대신
-    //    다른 페이지의 URL을 알려줄 때 사용한다.
+    // 다른 페이지의 URL을 알려줄 때 사용한다.
     // => 웹 브라우저는 응답 받는 즉시 해당 페이지를 요청한다.
-    //    웹 서버로부터 콘텐트를 받지 않았기 때문에 어떤 것도 출력하지 않는다.
-    //    바로 다른 페이지로 이동한다.
+    // 웹 서버로부터 콘텐트를 받지 않았기 때문에 어떤 것도 출력하지 않는다.
+    // 바로 다른 페이지로 이동한다.
     // => 리프래시와 달리 서버는 콘텐트(message-body)를 보내지 않는다.
     // => 사용 예:
-    //    - 로그인 후 로그인 결과를 출력하지 않고 즉시 메인 화면으로 보내고 싶을 때
-    //    - 결제완료 후 결과를 출력하지 않고 즉시 결제 상태 페이지로 보내고 싶을 때
+    // - 로그인 후 로그인 결과를 출력하지 않고 즉시 메인 화면으로 보내고 싶을 때
+    // - 결제완료 후 결과를 출력하지 않고 즉시 결제 상태 페이지로 보내고 싶을 때
     // => 리다이렉트 HTTP 응답 프로토콜
     //
-    //    HTTP/1.1 302 <----- 리다이렉트 응답 상태 코드
-    //    Location: s100 <----- 리다이렉트 URL
-    //    Content-Type: text/html;charset=UTF-8
-    //    Content-Length: 0
-    //    Date: Tue, 02 Apr 2019 03:38:45 GMT
-    //    빈 줄
-    //         <---- 콘텐트를 보내지 않는다. 즉 message-body가 없다.
+    // HTTP/1.1 302 <----- 리다이렉트 응답 상태 코드
+    // Location: s100 <----- 리다이렉트 URL
+    // Content-Type: text/html;charset=UTF-8
+    // Content-Length: 0
+    // Date: Tue, 02 Apr 2019 03:38:45 GMT
+    // 빈 줄
+    // <---- 콘텐트를 보내지 않는다. 즉 message-body가 없다.
     //
     System.out.println("/ex08/s3");
     response.setContentType("text/html;charset=UTF-8");

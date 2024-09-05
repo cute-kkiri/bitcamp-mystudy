@@ -13,6 +13,10 @@ dependencies {
     // Tomcat Embedded Server 라이브러리
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.93'
     
+    // Apache multipart/form-data 처리 라이브러리
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+    
+    
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation libs.guava
