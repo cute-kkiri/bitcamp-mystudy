@@ -22,7 +22,6 @@ public class Servlet14 extends HttpServlet {
     HttpSession session = request.getSession();
 
     // 클라이언트가 보낸 데이터를 세션에 보관한다.
-    String tel = request.getParameter("tel");
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -36,7 +35,7 @@ public class Servlet14 extends HttpServlet {
     out.printf("이름: %s<br>\n", session.getAttribute("name"));
     out.printf("나이: %s<br>\n", session.getAttribute("age"));
 
-    out.printf("전화: %s<br>\n", tel);
+    out.printf("전화: %s<br>\n", request.getParameter("tel"));
     out.println("</body></html>");
   }
 }

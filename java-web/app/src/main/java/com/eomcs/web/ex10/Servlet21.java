@@ -24,11 +24,11 @@ public class Servlet21 extends HttpServlet {
 
     // 쿠키 사용범위
     // => 쿠키의 사용 범위를 지정하지 않으면 쿠키를 발행한 URL 범위에 한정된다.
-    //    즉 같은 URL로 요청할 때만 쿠키를 보낸다.
+    // 즉 같은 URL로 요청할 때만 쿠키를 보낸다.
     // => 예)
-    //    서버에서 쿠키를 발행한 URL : /ex10/s21
-    //    클라이언트가 쿠키를 보내는 URL : /ex10/*
-    //    클라이언트가 쿠키를 보내지 않는 URL  : /ex10/* 이외의 모든 URL
+    // 서버에서 쿠키를 발행한 URL : /ex10/s21
+    // 클라이언트가 쿠키를 보내는 URL : /ex10/*
+    // 클라이언트가 쿠키를 보내지 않는 URL : /ex10/* 이외의 모든 URL
     // => HTTP 응답 프로토콜
     //
     // HTTP/1.1 200
@@ -43,7 +43,7 @@ public class Servlet21 extends HttpServlet {
     //
     // 사용 범위를 지정하지 않은 쿠키
     // => 쿠키를 발급한 서블릿과 같은 경로이거나 하위 경로의 서블릿을 요청할 때만
-    //    웹 브라우저가 서버에 쿠키를 보낸다.
+    // 웹 브라우저가 서버에 쿠키를 보낸다.
     // => 기본: /web/ex10
     Cookie c1 = new Cookie("v1", "aaa");
 
@@ -51,10 +51,10 @@ public class Servlet21 extends HttpServlet {
     // => 쿠키를 발급한 서블릿의 경로에 상관없이 지정된 경로의 서블릿을 요청할 때
     // 웹 브라우저가 서버에 쿠키를 보낸다.
     Cookie c2 = new Cookie("v2", "bbb");
-    c2.setPath("/web/ex10/a");
+    c2.setPath("/ex10/a");
 
     Cookie c3 = new Cookie("v3", "ccc");
-    c3.setPath("/web");
+    c3.setPath("/");
 
     // 어~ 왜 쿠키의 경로를 적을 때 웹 애플리케이션 루트(컨텍스트 루트)까지 적나요?
     // => 쿠키 경로는 서블릿 컨테이너가 사용하는 경로가 아니다.
