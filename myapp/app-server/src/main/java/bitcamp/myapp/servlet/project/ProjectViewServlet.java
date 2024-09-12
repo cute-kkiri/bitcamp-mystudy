@@ -1,7 +1,7 @@
 package bitcamp.myapp.servlet.project;
 
-import bitcamp.myapp.dao.ProjectDao;
-import bitcamp.myapp.dao.UserDao;
+import bitcamp.myapp.service.ProjectService;
+import bitcamp.myapp.service.UserService;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 
@@ -16,31 +16,28 @@ import java.util.List;
 @WebServlet("/project/view")
 public class ProjectViewServlet extends HttpServlet {
 
-  private ProjectDao projectDao;
-  private UserDao userDao;
+  private ProjectService projectService;
+  private UserService userService;
 
   @Override
   public void init() throws ServletException {
-    projectDao = (ProjectDao) this.getServletContext().getAttribute("projectDao");
-    userDao = (UserDao) this.getServletContext().getAttribute("userDao");
+    projectService = (ProjectService) this.getServletContext().getAttribute("projectService");
+    userService = (UserService) this.getServletContext().getAttribute("userService");
   }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
       int projectNo = Integer.parseInt(req.getParameter("no"));
-      Project project = projectDao.findBy(projectNo);
+      Project project = projectService.get(projectNo);
       req.setAttribute("project", project);
 
-      List<User> users = userDao.list();
+      List<User> users = userService.list();
       req.setAttribute("users", users);
-
-      res.setContentType("text/html;charset=UTF-8");
-      req.getRequestDispatcher("/project/view.jsp").include(req, res);
+      req.setAttribute("viewName", "/project/view.jsp");
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }

@@ -1,8 +1,7 @@
 package bitcamp.myapp.servlet.user;
 
-import bitcamp.myapp.dao.UserDao;
+import bitcamp.myapp.service.UserService;
 import bitcamp.myapp.vo.User;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,13 +13,11 @@ import java.io.IOException;
 @WebServlet("/user/update")
 public class UserUpdateServlet extends HttpServlet {
 
-  private UserDao userDao;
-  private SqlSessionFactory sqlSessionFactory;
+  private UserService userService;
 
   @Override
   public void init() throws ServletException {
-    this.userDao = (UserDao) this.getServletContext().getAttribute("userDao");
-    this.sqlSessionFactory = (SqlSessionFactory) this.getServletContext().getAttribute("sqlSessionFactory");
+    this.userService = (UserService) this.getServletContext().getAttribute("userService");
   }
 
   @Override
@@ -33,17 +30,14 @@ public class UserUpdateServlet extends HttpServlet {
       user.setPassword(req.getParameter("password"));
       user.setTel(req.getParameter("tel"));
 
-      if (userDao.update(user)) {
-        sqlSessionFactory.openSession(false).commit();
-        res.sendRedirect("/user/list");
+      if (userService.update(user)) {
+        req.setAttribute("viewName", "redirect:list");
       } else {
         throw new Exception("없는 회원입니다!");
       }
 
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 

@@ -28,6 +28,12 @@
 <c:if test="${age >= 19}">
     <p>성년입니다.</p>
 </c:if>
+<c:if test="${gender == 'man' }">
+    <p>남성입니다.</p>
+</c:if>
+<c:if test="${gender == 'woman' }">
+    <p>여성입니다.</p>
+</c:if>
 <hr>
 
 <h2>조건문의 결과를 보관소에 저장하기</h2>

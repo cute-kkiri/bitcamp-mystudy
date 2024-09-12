@@ -1,6 +1,6 @@
 package bitcamp.myapp.servlet.board;
 
-import bitcamp.myapp.dao.BoardDao;
+import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.Board;
 
 import javax.servlet.ServletException;
@@ -14,25 +14,22 @@ import java.util.List;
 @WebServlet("/board/list")
 public class BoardListServlet extends HttpServlet {
 
-  private BoardDao boardDao;
+  private BoardService boardService;
 
   @Override
   public void init() throws ServletException {
-    boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    boardService = (BoardService) this.getServletContext().getAttribute("boardService");
   }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
-      List<Board> list = boardDao.list();
+      List<Board> list = boardService.list();
       req.setAttribute("list", list);
-
-      res.setContentType("text/html;charset=UTF-8");
-      req.getRequestDispatcher("/board/list.jsp").include(req, res);
+      req.setAttribute("viewName", "/board/list.jsp");
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 

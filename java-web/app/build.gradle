@@ -16,6 +16,8 @@ dependencies {
     // Apache multipart/form-data 처리 라이브러리
     implementation 'commons-fileupload:commons-fileupload:1.5'
     
+    //JSTL API 및 구현체 라이브러리
+    implementation 'javax.servlet:jstl:1.2'
     
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
