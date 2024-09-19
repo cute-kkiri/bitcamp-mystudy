@@ -26,7 +26,7 @@
   </nav>
   <div class='login-state pos-right'>
 <c:if test="${empty loginUser}">
-    <a href='/app/auth/login' class='btn btn-primary'>로그인</a>
+    <a href='/app/auth/form' class='btn btn-primary'>로그인</a>
 </c:if>
 <c:if test="${not empty loginUser}">
     <a href='/app/user/view?no=${loginUser.no}' class='btn btn-light'>${loginUser.name}</a>
