@@ -2,11 +2,12 @@ package bitcamp.myapp.servlet;
 
 import bitcamp.myapp.annotation.RequestMapping;
 import bitcamp.myapp.annotation.RequestParam;
-import bitcamp.myapp.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -14,14 +15,17 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.*;
 
+@MultipartConfig(
+        maxFileSize = 1024 * 1024 * 60,
+        maxRequestSize = 1024 * 1024 * 100)
+@WebServlet("/app/*")
 public class DispatcherServlet extends HttpServlet {
 
-    ApplicationContext appCtx;
     private List<Object> controllers;
 
-    public DispatcherServlet(ApplicationContext appCtx) {
-        this.appCtx = appCtx;
-        this.controllers = appCtx.getControllers();
+    @Override
+    public void init() throws ServletException {
+        controllers = (List<Object>) this.getServletContext().getAttribute("controllers");
     }
 
     @Override
@@ -84,8 +88,9 @@ public class DispatcherServlet extends HttpServlet {
             Method requestHandler,
             HttpServletRequest req,
             HttpServletResponse res,
-            Map<String, Object> requestAttributesMap) throws Exception {
-
+            Map<String, Object> requestAttributesMap
+    ) throws Exception {
+        // 메서드의 파라미터 분석
         Parameter[] params = requestHandler.getParameters();
         ArrayList<Object> args = new ArrayList<>();
 
@@ -103,12 +108,13 @@ public class DispatcherServlet extends HttpServlet {
                     paramType == String.class ||
                     paramType == java.util.Date.class ||
                     paramType == java.sql.Date.class ||
-                    paramType == int[].class) {
+                    paramType == int[].class
+            ) {
                 RequestParam paramAnno = param.getAnnotation(RequestParam.class);
-                args.add(getDefaultTypeValueFromRequestParameter(
+                args.add(getPrimitiveValueOrStringFromRequestParameter(
                         req, // 클라이언트가 보낸 값이 저장된 ServletRequest 보관소
                         param.getType(), // ServletRequest 보관소에서 꺼낸 값을 형변환할 때 타입
-                        paramAnno.value() // ServletRequet 보관소에서 꺼낼 값의 파라미터명
+                        paramAnno.value() // ServletRequest 보관소에서 꺼낼 값의 파라미터명
                 ));
             } else if (paramType == Part.class) {
                 RequestParam paramAnno = param.getAnnotation(RequestParam.class);
@@ -130,11 +136,11 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private Object getDefaultTypeValueFromRequestParameter(
+    private Object getPrimitiveValueOrStringFromRequestParameter(
             HttpServletRequest req,
             Class<?> paramType,
-            String paramName) {
-
+            String paramName
+    ) {
         // 클라이언트가 보낸 값들 중에서 paramName에 해당하는 값을 꺼낸다.
         String paramValue = req.getParameter(paramName);
         if (paramType != boolean.class && paramType.getComponentType() == null && paramValue == null) {
@@ -158,7 +164,7 @@ public class DispatcherServlet extends HttpServlet {
                 values[i] = Integer.parseInt(paramValues[i]);
             }
             return values;
-        } else if (paramType == long.class) {
+        } else if (paramType == Long.class) {
             return Long.parseLong(paramValue);
         } else if (paramType == float.class) {
             return Float.parseFloat(paramValue);
@@ -171,7 +177,8 @@ public class DispatcherServlet extends HttpServlet {
                     paramValue.equals("0") ||
                     paramValue.equals("false") ||
                     paramValue.equals("off") ||
-                    paramValue.equals("no")) {
+                    paramValue.equals("no")
+            ) {
                 return false;
             }
             return true;
@@ -183,7 +190,7 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private Object createDomainObject(HttpServletRequest req, Class<?> paramType) throws Exception {
-        // 요청핸들러가 원하는 도메인 객체를 생성한다.
+        // 요청핸들러가 원하는 파라미터 객체를 생성한다.
         Object domainObject = paramType.getConstructor().newInstance();
 
         // 도메인 객체의 셋터 메서드를 호출하여 클라이언트가 보낸 값을 보관한다.
@@ -196,8 +203,9 @@ public class DispatcherServlet extends HttpServlet {
             Class<?> propertyType = m.getParameterTypes()[0]; // setter 메서드에 파라미터가 무조건 한 개 있다고 가정한다.
             String propertyName = Character.toLowerCase(m.getName().charAt(3)) + m.getName().substring(4);
 
-            // 셋터 메서드의 이름(프로퍼티명)과 일치하는 값을 클라이언트가 보낸 파라미터에서 꺼낸다.
-            Object value = getDefaultTypeValueFromRequestParameter(req, propertyType, propertyName);
+            // 셋터 메서드의 이름(프로퍼티명)과 일치하는 파라미터 값을 클라이언트가 보낸 파라미터에서 꺼낸다.
+            Object value = getPrimitiveValueOrStringFromRequestParameter(req, propertyType, propertyName);
+
             if (value == null) { // 셋터 메서드에 넣을 값이 없으면
                 continue;
             }
@@ -210,7 +218,7 @@ public class DispatcherServlet extends HttpServlet {
         return domainObject;
     }
 
-    private Part[] getPartArray(HttpServletRequest req, String paramName) throws Exception {
+    private Object getPartArray(HttpServletRequest req, String paramName) throws Exception {
         Collection<Part> parts = req.getParts();
         ArrayList<Part> list = new ArrayList<>();
 
@@ -220,7 +228,7 @@ public class DispatcherServlet extends HttpServlet {
             }
             list.add(part);
         }
+
         return list.toArray(new Part[0]);
     }
-
 }
