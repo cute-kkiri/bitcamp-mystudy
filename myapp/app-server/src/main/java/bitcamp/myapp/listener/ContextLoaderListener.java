@@ -30,11 +30,7 @@ public class ContextLoaderListener implements ServletContextListener {
 
             // 프론트 컨트롤러 역할을 수행할 서블릿 객체 생성
             DispatcherServlet dispatcherServlet = new DispatcherServlet(iocContainer);
-
-            // 서블릿 컨테이너에 서블릿을 등록하기
             ServletRegistration.Dynamic servletRegistration = ctx.addServlet("app", dispatcherServlet);
-
-            // 서블릿 정보 설정
             servletRegistration.addMapping("/app/*"); // URL 매핑
             servletRegistration.setLoadOnStartup(1); // 웹애플리케이션 시작할 때 객체 자동 생성
             servletRegistration.setMultipartConfig(new MultipartConfigElement( // 멀티파트 설정
@@ -45,17 +41,20 @@ public class ContextLoaderListener implements ServletContextListener {
 
             // 필터 객체 생성
             CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter("UTF-8");
-
-            // 필터 객체를 서블릿 컨테이너에 등록
             FilterRegistration.Dynamic filterRegistration = ctx.addFilter("characterEncodingFilter", characterEncodingFilter);
-
-            // 필터 객체를 설정
             filterRegistration.addMappingForServletNames(
                     EnumSet.of(DispatcherType.REQUEST, DispatcherType.INCLUDE, DispatcherType.FORWARD), // 필터를 어떤 상황에서 동작하도록 할 것인지 지정
                     false, // web.xml 에 설정된 매핑 정보를 적용한 후에 필터 정보를 설정할 것인지
                     "app" // 필터를 적용할 서블릿의 별명
             );
 
+            // 현재 IoC 컨테이너에 들어 있는 빈(자바 객체)을 조회
+            // System.out.println("빈 개수: " + iocContainer.getBeanDefinitionCount());
+            // String[] beanNames = iocContainer.getBeanDefinitionNames();
+            // for (String beanName : beanNames) {
+            //   Object bean = iocContainer.getBean(beanName);
+            //   System.out.println(beanName + " ==> " + bean.getClass().getCanonicalName());
+            // }
 
         } catch (Exception e) {
             System.out.println("서비스 준비 중 오류 발생!");

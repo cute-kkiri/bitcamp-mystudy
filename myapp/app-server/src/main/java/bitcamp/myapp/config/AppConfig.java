@@ -1,26 +1,41 @@
 package bitcamp.myapp.config;
 
-import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.dao.DaoFactory;
-import bitcamp.myapp.dao.ProjectDao;
-import bitcamp.myapp.dao.UserDao;
-import bitcamp.mybatis.SqlSessionFactoryProxy;
-import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import java.io.InputStream;
+import javax.sql.DataSource;
 
 @ComponentScan("bitcamp.myapp")
 @EnableWebMvc
+@PropertySource({
+        "classpath:config/jdbc.properties",
+        "file:${user.home}/config/ncp.properties"
+})
+@EnableTransactionManagement // 스프링 프렘워크야, @Transactional 메서드가 붙은 클래스를 만나면 Proxy 클래스를 자동 생성하라!
+@MapperScan("bitcamp.myapp.dao")
 public class AppConfig {
+
+    ApplicationContext appCtx;
+
+    public AppConfig(ApplicationContext appCtx) {
+        this.appCtx = appCtx;
+    }
+
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver vr = new InternalResourceViewResolver();
@@ -29,38 +44,36 @@ public class AppConfig {
         return vr;
     }
 
-    // @Bean("multipartResolver")
     @Bean
     public MultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
     }
 
     @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        InputStream inputStream = Resources.getResourceAsStream("config/mybatis-config.xml");
-        SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
-        SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(inputStream);
-
-        return new SqlSessionFactoryProxy(sqlSessionFactory);
+    public DataSource dataSource(
+            @Value("${jdbc.driver}") String jdbcDriver,
+            @Value("${jdbc.url}") String jdbcUrl,
+            @Value("${jdbc.username}") String jdbcUsername,
+            @Value("${jdbc.password}") String jdbcPassword) {
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+        ds.setDriverClassName(jdbcDriver);
+        ds.setUrl(jdbcUrl);
+        ds.setUsername(jdbcUsername);
+        ds.setPassword(jdbcPassword);
+        return ds;
     }
 
     @Bean
-    public DaoFactory daoFactory(SqlSessionFactory sqlSessionFactory) throws Exception {
-        return new DaoFactory(sqlSessionFactory);
+    public PlatformTransactionManager transactionManager(DataSource ds) {
+        return new DataSourceTransactionManager(ds);
     }
 
     @Bean
-    public UserDao userDao(DaoFactory daoFactory) throws Exception {
-        return daoFactory.createObject(UserDao.class);
-    }
-
-    @Bean
-    public BoardDao boardDao(DaoFactory daoFactory) throws Exception {
-        return daoFactory.createObject(BoardDao.class);
-    }
-
-    @Bean
-    public ProjectDao projectDao(DaoFactory daoFactory) throws Exception {
-        return daoFactory.createObject(ProjectDao.class);
+    public SqlSessionFactory sqlSessionFactory(DataSource ds) throws Exception {
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setDataSource(ds);
+        factoryBean.setTypeAliasesPackage("bitcamp.myapp.vo");
+        factoryBean.setMapperLocations(appCtx.getResources("classpath:mappers/*Mapper.xml"));
+        return factoryBean.getObject();
     }
 }
