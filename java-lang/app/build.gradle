@@ -9,6 +9,9 @@ repositories {
 }
 
 dependencies {
+    // Spring IoC 컨테이너
+    implementation 'org.springframework:spring-context:5.3.39'
+    
     // MariaDB JDBC Driver
     // implementation 'org.mariadb.jdbc:mariadb-java-client:3.4.1'
 
@@ -23,11 +26,10 @@ dependencies {
     
     // Tomcat Embedded Server 라이브러리
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.93'
-    
 
     implementation 'org.apache.poi:poi-ooxml:5.3.0'
     // implementation 'org.apache.poi:poi:5.3.0'
-    implementation 'com.drewnoakes:metadata-extractor:2.19.0'
+    // implementation 'com.drewnoakes:metadata-extractor:2.19.0'
     
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

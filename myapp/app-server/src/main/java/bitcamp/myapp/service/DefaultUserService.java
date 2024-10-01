@@ -10,36 +10,36 @@ import java.util.List;
 @Service
 public class DefaultUserService implements UserService {
 
-  private UserDao userDao;
+    private UserDao userDao;
 
-  public DefaultUserService(UserDao userDao) {
-    this.userDao = userDao;
-  }
+    public DefaultUserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
-  @Transactional
-  public void add(User user) throws Exception {
-    userDao.insert(user);
-  }
+    @Transactional
+    public void add(User user) throws Exception {
+        userDao.insert(user);
+    }
 
-  public List<User> list() throws Exception {
-    return userDao.list();
-  }
+    public List<User> list() throws Exception {
+        return userDao.list();
+    }
 
-  public User get(int userNo) throws Exception {
-    return userDao.findBy(userNo);
-  }
+    public User get(int userNo) throws Exception {
+        return userDao.findBy(userNo);
+    }
 
-  public User exists(String email, String password) throws Exception {
-    return userDao.findByEmailAndPassword(email, password);
-  }
+    public User exists(String email, String password) throws Exception {
+        return userDao.findByEmailAndPassword(email, password);
+    }
 
-  @Transactional
-  public boolean update(User user) throws Exception {
-    return userDao.update(user);
-  }
+    @Transactional
+    public boolean update(User user) throws Exception {
+        return userDao.update(user);
+    }
 
-  @Transactional
-  public boolean delete(int userNo) throws Exception {
-    return userDao.delete(userNo);
-  }
+    @Transactional
+    public boolean delete(int userNo) throws Exception {
+        return userDao.delete(userNo);
+    }
 }
