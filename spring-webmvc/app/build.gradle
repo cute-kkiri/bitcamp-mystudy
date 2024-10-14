@@ -1,0 +1,62 @@
+plugins {
+    id 'application'
+    id 'eclipse'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Tomcat Embedded Server 라이브러리
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.93'
+    //JSTL API 및 구현체 라이브러리
+    implementation 'javax.servlet:jstl:1.2'
+    
+    // https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+    
+    // Google JSON 라이브러리
+    implementation 'com.google.code.gson:gson:2.11.0'
+    
+    // Jakson JSON 라이브러리
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
+
+    // Spring Framework 라이브러리
+    implementation 'org.springframework:spring-webmvc:5.3.39'
+    
+    testImplementation libs.junit.jupiter
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation libs.guava
+    
+    // 외부 라이브러리 파일을 프로젝트에 추가
+    // implementation files('libs/my-library.jar')
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'org.example.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// eclipse 프로젝트 이름을 설정하기
+eclipse {
+    project {
+        name = "spring-webmvc" // 프로젝트 이름을 지정하지 않으면 폴더 이름(예: app)을 사용한다.
+    }
+    jdt { // 버전 체크
+      sourceCompatibility = 21
+      targetCompatibility = 21
+      javaRuntimeName = "JavaSE-21"
+    }
+}
