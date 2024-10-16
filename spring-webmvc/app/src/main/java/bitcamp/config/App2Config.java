@@ -27,19 +27,18 @@ public class App2Config implements WebMvcConfigurer {
   // DispatcherServlet의 기본 ViewResolver를 교체하기
   // 1) XML 설정
   // <bean id="viewResolver"
-  //       class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-  //   <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-  //   <property name="prefix" value="/WEB-INF/jsp/"/>
-  //   <property name="suffix" value=".jsp"/>
+  // class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+  // <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+  // <property name="prefix" value="/WEB-INF/jsp/"/>
+  // <property name="suffix" value=".jsp"/>
   // </bean>
   //
   // 2) Java Config 설정
   @Bean
   public ViewResolver viewResolver() {
-    InternalResourceViewResolver vr = new InternalResourceViewResolver(
-        "/WEB-INF/jsp2/", // prefix
+    InternalResourceViewResolver vr = new InternalResourceViewResolver("/WEB-INF/jsp2/", // prefix
         ".jsp" // suffix
-        );
+    );
     return vr;
     // => prefix + 페이지컨트롤러 리턴 값 + suffix
     // 예) "/WEB-INF/jsp2/" + "board/list" + ".jsp" = /WEB-INF/jsp2/board/list.jsp
@@ -104,9 +103,7 @@ public class App2Config implements WebMvcConfigurer {
     // /c04_1/a/b/x
     // 즉, /c04_1/ 바로 밑의 있는 자원에 대해서만 인터셉터를 적용한다.
     //
-    registry
-    .addInterceptor(new Controller04_1_Interceptor2())
-    .addPathPatterns("/c04_1/*");
+    registry.addInterceptor(new Controller04_1_Interceptor2()).addPathPatterns("/c04_1/*");
 
     // 3) 특정 요청에 대해 실행할 인터셉터 등록하기
     // => 패턴: /c04_1/**
@@ -120,9 +117,7 @@ public class App2Config implements WebMvcConfigurer {
     // /c03_1/x
     // 즉, /c04_1/ 의 모든 하위 경로에 있는 자원에 대해서만 인터셉터를 적용한다.
     //
-    registry
-    .addInterceptor(new Controller04_1_Interceptor3())
-    .addPathPatterns("/c04_1/**");
+    registry.addInterceptor(new Controller04_1_Interceptor3()).addPathPatterns("/c04_1/**");
 
     // 4) 특정 요청에 대해 인터셉터 적용을 제외하기
     // => 패턴: /c04_1/** (include), /c04_1/a/** (exclude)
@@ -138,10 +133,8 @@ public class App2Config implements WebMvcConfigurer {
     // /c04_1/a/b/x
     // 즉, /c04_1/ 의 모든 하위 경로에 있는 자원에 대해서만 인터셉터를 적용한다.
     // 단 /c04_1/a/ 의 모든 하위 경로에 있는 자원은 제외한다.
-    registry
-    .addInterceptor(new Controller04_1_Interceptor4())
-    .addPathPatterns("/c04_1/**")
-    .excludePathPatterns("/c04_1/a/**");
+    registry.addInterceptor(new Controller04_1_Interceptor4()).addPathPatterns("/c04_1/**")
+        .excludePathPatterns("/c04_1/a/**");
   }
 }
 

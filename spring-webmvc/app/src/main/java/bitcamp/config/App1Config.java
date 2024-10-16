@@ -19,6 +19,7 @@ public class App1Config {
     mr.setMaxInMemorySize(2000000);
     mr.setMaxUploadSizePerFile(5000000);
     return mr;
+    // return new StandardServletMultipartResolver();
   }
 }
 
