@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app-server/bitcamp-mystudy.myapp.app-server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app-server/bitcamp-mystudy.myapp.app-server.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app-client/myapp.app-client.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app-client/myapp.app-client.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app-client/myapp.app-client.test.iml" filepath="$PROJECT_DIR$/.idea/modules/app-client/myapp.app-client.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app-server/myapp.app-server.iml" filepath="$PROJECT_DIR$/.idea/modules/app-server/myapp.app-server.iml" />
