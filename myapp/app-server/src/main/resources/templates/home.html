@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+<head data-th-replace="~{header :: head}"></head>
+<body>
+    <header data-th-replace="~{header :: #page-header}"></header>
+
+    <h1>환영합니다!</h1>
+    <p>이 사이트는 팀 프로젝트를 관리하는 서비스를 제공합니다.</p>
+    <!-- th:text 내용이 태그 content안에 삽입. -->
+    <p>예제텍스트</p>
+    <!--<p th:text="${welcome}"></p>-->
+    <!-- th:text가 들어가지만 안에 내용을 넣는 이유는 샘플 데이터를 확인하기 위함. -->
+    <!-- <p th:text="${welcome}">예제텍스트</p> -->
+    <!-- html5스러운 html5에 유효한 타임리프 코드 data-속성 -->
+    <!-- <p data-th-text="|인사말: ${welcome}|">환영합니다!</p> -->
+    <p data-th-text="${welcome} ?: '반가워!'">환영합니다!</p>
+    <!-- html태그 있으면 그대로 출력하라. - utext -->
+    <p data-th-utext="${welcome} ?: '반가워!'">환영합니다!</p>
+</body>
+</html>
