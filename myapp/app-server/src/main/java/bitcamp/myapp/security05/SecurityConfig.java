@@ -1,18 +1,16 @@
-package bitcamp.myapp.Security05;
+package bitcamp.myapp.security05;
 
 import bitcamp.myapp.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 public class SecurityConfig {
 
     private static final Log log = LogFactory.getLog(SecurityConfig.class);
@@ -46,13 +44,13 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(UserService userService) {
         // 우리가 만든 UserDetailsService 객체를 사용한다.
         // => DB에서 사용자 정보를 가져올 것이다.
-        return new DbUserDetailsService(userService);
+        return new bitcamp.myapp.security05.DbUserDetailsService(userService);
     }
 
     // 로그인 폼에서 입력한 암호와 DB에서 꺼낸 암호가 같은지 비교하는 객체를 준비한다.
     // => Spring Security는 이 객체를 사용하여 암호를 비교한다.
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new Base64PasswordEncoder();
+        return new bitcamp.myapp.security05.Base64PasswordEncoder();
     }
 }
